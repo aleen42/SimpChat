@@ -11,7 +11,7 @@ import javax.swing.JButton;
 
 public class Button extends JButton 
 { 
-    public Button(ImageIcon icon, ImageIcon mouseover, ImageIcon pressed) 
+    public Button(ImageIcon icon, ImageIcon mouseover, ImageIcon pressed, int type) 
     { 
         setSize(icon.getImage().getWidth(null),icon.getImage().getHeight(null)); 
         setIcon(icon); 
@@ -26,7 +26,6 @@ public class Button extends JButton
         	{
 				setIcon(mouseover);
         	}
-        	
         	public void mouseExited(MouseEvent e)
         	{
         		setIcon(icon);
@@ -37,7 +36,18 @@ public class Button extends JButton
 			}
 			public void mouseReleased(MouseEvent e) 
 			{
-				setIcon(icon);	
+				switch(type)
+				{
+				case 0: 
+					setIcon(icon);	
+					break;
+				case 1:
+					setIcon(mouseover);
+					break;
+				default:
+					break;
+				}
+				
 			}
 		});
     } 

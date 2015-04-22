@@ -12,8 +12,11 @@ public class SimpChat extends JFrame
 	private JPanel contentPane;
 	private int point_x, point_y;
 	private boolean isDragging = false;
-	private TrayIcon trayIcon = null; // Icon
-	private SystemTray tray = null; // Task Bar
+	private boolean isUserListShown = false;
+//	private TrayIcon trayIcon = null; // Icon
+//	private SystemTray tray = null; // Task Bar
+
+	private final JPanel panel = new JPanel();
 	/**
 	 * Launch the application.
 	 */
@@ -41,15 +44,17 @@ public class SimpChat extends JFrame
 	 */
 	public SimpChat() 
 	{
+		panel.setLayout(null);
 
 		setUndecorated(true);	 																	//Without Border
 		AWTUtilities.setWindowOpaque(this, false);													//Set Background Opaque to false
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Dimension scrSize = Toolkit.getDefaultToolkit().getScreenSize();  							//Get the size of current screen
-		setBounds(100, 100, (int)(scrSize.width * 0.3), (int)(scrSize.height * 0.8));	
+		setBounds(0, 0, (int)(scrSize.width * 0.3) + 200, (int)(scrSize.height * 0.8));	
 		setLocation((scrSize.width - getWidth()) / 2, (scrSize.height - getHeight()) / 2);			//Startup location set at the center of current screen 
 		
+		/* Background */
 		Image bg = this.getToolkit().getImage("./Pic/bg.png");										//Set a JPanel with a background
 		contentPane = new Background(bg);
 		contentPane.setOpaque(false);
@@ -57,13 +62,37 @@ public class SimpChat extends JFrame
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
+		/* User List */
+		
+			/* JPanel */
+		Image userlist_bg = this.getToolkit().getImage("./Pic/userlist_bg.png");
+		JPanel userlist = new UserList(userlist_bg);
+		userlist.setBounds((int)(scrSize.width * 0.3) - 2, ((int)(scrSize.height * 0.8) - 400) / 2, 200, 400);
+		contentPane.add(userlist);
+		
+			/* Button */
+		ImageIcon userlist_button_bg = new ImageIcon("./Pic/userlistbutton_static.png");
+		ImageIcon userlist_button_mouseover = new ImageIcon("./Pic/userlistbutton_mouseover.png");
+		ImageIcon userlist_button_pressed = new ImageIcon("./Pic/userlistbutton_pressed.png");
+		JButton UserList_Button = new Button(userlist_button_bg, userlist_button_mouseover, userlist_button_pressed, 1);
+		UserList_Button.setOpaque(false);
+		UserList_Button.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent arg0) 
+			{
+				Show_UserList(isUserListShown, userlist);
+//				setVisible(true);	//set the Z order of JFrames
+			}
+		});
+		UserList_Button.setBounds(379, getHeight() / 2 - 84 / 2, 28, 84);
+		contentPane.add(UserList_Button);		
 		
 		/* Close Button */
 		ImageIcon close_button_bg = new ImageIcon("./Pic/closebutton_static.png");
 		ImageIcon close_button_mouseover = new ImageIcon("./Pic/closebutton_mouseover.png");
 		ImageIcon close_button_pressed = new ImageIcon("./Pic/closebutton_pressed.png");
 		
-		JButton Close_Button = new Button(close_button_bg, close_button_mouseover, close_button_pressed);
+		JButton Close_Button = new Button(close_button_bg, close_button_mouseover, close_button_pressed, 0);
 		Close_Button.setOpaque(false);
 		Close_Button.addActionListener(new ActionListener() 
 		{
@@ -79,7 +108,7 @@ public class SimpChat extends JFrame
 		ImageIcon minimize_button_bg = new ImageIcon("./Pic/minimizebutton_static.png");
 		ImageIcon minimize_button_mouseover = new ImageIcon("./Pic/minimizebutton_mouseover.png");
 		ImageIcon minimize_button_pressed = new ImageIcon("./Pic/minimizebutton_pressed.png");
-		JButton Minimize_Button = new Button(minimize_button_bg, minimize_button_mouseover, minimize_button_pressed);
+		JButton Minimize_Button = new Button(minimize_button_bg, minimize_button_mouseover, minimize_button_pressed, 0);
 		Minimize_Button.setOpaque(false);
 		Minimize_Button.addActionListener(new ActionListener() 
 		{
@@ -100,6 +129,7 @@ public class SimpChat extends JFrame
 		});
 		Minimize_Button.setBounds(351, 4, 28, 28);
 		contentPane.add(Minimize_Button);
+	
 //		if (SystemTray.isSupported()) 
 //		{ // 如果操作系统支持托盘
 //			this.tray();
@@ -135,49 +165,9 @@ public class SimpChat extends JFrame
 		}); 
 	}
 	
-//	void tray() 		
-//	{
-//		tray = SystemTray.getSystemTray(); // 获得本操作系统托盘的实例
-//		ImageIcon icon = new ImageIcon("./Pic/closebutton_static.png"); // 将要显示到托盘中的图标
-//		
-//		PopupMenu pop = new PopupMenu(); // 构造一个右键弹出式菜单
-//		MenuItem show = new MenuItem("打开程序");
-//		MenuItem exit = new MenuItem("退出程序");
-//		pop.add(show);
-//		pop.add(exit);
-//		trayIcon = new TrayIcon(icon.getImage(), "托盘", pop);
-//
-//		/* 添加鼠标监听器，当鼠标在托盘图标上双击时，默认显示窗口 */
-//		trayIcon.addMouseListener(new MouseAdapter() 
-//		{
-//			public void mouseClicked(MouseEvent e) 
-//			{
-//			    if (e.getClickCount() == 2) 
-//			    { // 鼠标双击
-//			    	tray.remove(trayIcon); // 从系统的托盘实例中移除托盘图标
-//			    	setExtendedState(JFrame.NORMAL);
-//			    	setVisible(true); // 显示窗口
-//			    	toFront();
-//			    }
-//		   }
-//		});
-//		show.addActionListener(new ActionListener() 
-//		{ // 点击“显示窗口”菜单后将窗口显示出来
-//			public void actionPerformed(ActionEvent e) 
-//			{
-//				tray.remove(trayIcon); // 从系统的托盘实例中移除托盘图标
-//				setExtendedState(JFrame.NORMAL);
-//				setVisible(true); // 显示窗口
-//				toFront();
-//		    }
-//		});
-//		exit.addActionListener(new ActionListener() 
-//		{ // 点击“退出演示”菜单后退出程序
-//			public void actionPerformed(ActionEvent e) 
-//			{
-//				System.exit(0); // 退出程序
-//		    }
-//		});
-//	}
-
+	public void Show_UserList(boolean isthere, JPanel userlist_window)
+	{
+		userlist_window.setVisible(!isthere);
+		isUserListShown = !isthere;
+	}
 }
