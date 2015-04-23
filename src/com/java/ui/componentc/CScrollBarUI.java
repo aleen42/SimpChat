@@ -11,16 +11,26 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 public class CScrollBarUI extends BasicScrollBarUI implements MouseListener {
-    private static final Color BACKGROUND = UIResourceManager
-            .getColor("ScrollBarBackground");
+    private static Color BACKGROUND; 
+    private static Color BORDER_COLOR;
 
-    private static final Color BORDER_COLOR = UIResourceManager
-            .getColor("ScrollBarBorderColor");
-
+    public CScrollBarUI()
+    {
+    	BACKGROUND = UIResourceManager.getColor("ScrollBarBackground");
+    	BORDER_COLOR = UIResourceManager.getColor("ScrollBarBorderColor");
+    }
+    
+    public CScrollBarUI(Color Background, Color Border_Color)
+    {
+    	BACKGROUND = Background;
+    	BORDER_COLOR = Border_Color;
+    }
+    
     public static ComponentUI createUI(JComponent c) {
         return new CScrollBarUI();
     }
 
+    
     protected JCButton decreaseButton;
     protected JCButton increaseButton;
 

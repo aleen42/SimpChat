@@ -67,7 +67,7 @@ public class SimpChat extends JFrame
 			/* JPanel */
 		Image userlist_bg = this.getToolkit().getImage("./Pic/userlist_bg.png");
 		JPanel userlist = new UserList(userlist_bg);
-		userlist.setBounds((int)(scrSize.width * 0.3) - 2, ((int)(scrSize.height * 0.8) - 400) / 2, 200, 400);
+		userlist.setBounds((int)(scrSize.width * 0.3) - 4, ((int)(scrSize.height * 0.8) - 400) / 2, 200, 400);
 		contentPane.add(userlist);
 		
 			/* Button */

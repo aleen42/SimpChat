@@ -14,7 +14,7 @@ public class UserList_Item extends JPanel {
 	public UserList_Item(String User_name) {
 		setOpaque(false);
 		JLabel lblA = new JLabel(User_name);
-		lblA.setForeground(Color.WHITE);
+		lblA.setForeground(Color.BLACK);
 		lblA.setFont(new Font("Arial", Font.PLAIN, 18));
 		add(lblA);
 		

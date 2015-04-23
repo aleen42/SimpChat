@@ -52,7 +52,7 @@ public class JCList extends JList {
         setCellRenderer(new CListCellRenderer());
         setFont(UIUtil.getDefaultFont());
         setBackground(UIResourceManager.getWhiteColor());
-        setForeground(Color.BLACK);
+        setForeground(Color.WHITE);
         setSelectionForeground(UIResourceManager.getWhiteColor());
         setDisabledForeground(new Color(123, 123, 122));
         setSelectionBackground(Color.BLUE);

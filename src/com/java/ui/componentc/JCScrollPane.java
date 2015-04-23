@@ -17,7 +17,7 @@ import java.awt.event.ComponentEvent;
 
 public class JCScrollPane extends JScrollPane implements AdjustmentListener {
     protected class CScrollBar extends JScrollPane.ScrollBar {
-//        private static final long serialVersionUID = -8174518362746135594L;
+        private static final long serialVersionUID = -8174518362746135594L;
 
         public CScrollBar(int orientation) {
             super(orientation);
@@ -31,8 +31,14 @@ public class JCScrollPane extends JScrollPane implements AdjustmentListener {
         }
     }
 
-//    private static final long serialVersionUID = -8833386850571879174L;
+    private static final long serialVersionUID = -8833386850571879174L;
     private float alpha;
+    private HeaderPane header;
+    private Color headerDisabledForeground;
+    private Font headerFont;
+    private Color headerForeground;
+    private JLabel headerLabel;
+    private boolean headerVisible;
     private Image image;
     private boolean imageOnly;
     private Border insideBorder;
@@ -42,11 +48,11 @@ public class JCScrollPane extends JScrollPane implements AdjustmentListener {
     private Insets visibleInsets;
 
     public JCScrollPane() {
-        this(null, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        this(null, 20, 30);
     }
 
     public JCScrollPane(Component view) {
-        this(view, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        this(view, 20, 30);
     }
 
     public JCScrollPane(Component view, int vsbPolicy, int hsbPolicy) {
@@ -58,21 +64,36 @@ public class JCScrollPane extends JScrollPane implements AdjustmentListener {
         setBackground(Color.GRAY);
         setForeground(Color.BLACK);
         setFont(UIUtil.getDefaultFont());
+        setHeaderFont(getFont());
+        setHeaderVisible(true);
+        setHeaderForeground(new Color(0, 28, 48));
+        setHeaderDisabledForeground(new Color(128, 142, 152));
+//        initHeader();
         setCorner("LOWER_RIGHT_CORNER", createLowerRightCorner());
         this.alpha = 1.0F;
         this.visibleInsets = new Insets(1, 1, 1, 1);
 
         this.viewport.addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent e) {
-                int right = JCScrollPane.this.verticalScrollBar.isVisible() ? 1 : 0;
-                int bottom = (JCScrollPane.this.horizontalScrollBar != null) && (JCScrollPane.this.horizontalScrollBar.isVisible()) ? 1 : 0;
-                JCScrollPane.this.setViewportBorder(new EmptyBorder(0, 0, bottom, right));
+                int right = JCScrollPane.this.verticalScrollBar.isVisible() ? 1
+                        : 0;
+                int bottom = (JCScrollPane.this.horizontalScrollBar != null)
+                        && (JCScrollPane.this.horizontalScrollBar.isVisible()) ? 1
+                        : 0;
+                JCScrollPane.this.setViewportBorder(new EmptyBorder(0, 0,
+                        bottom, right));
             }
         });
     }
 
     public JCScrollPane(int vsbPolicy, int hsbPolicy) {
         this(null, vsbPolicy, hsbPolicy);
+    }
+
+    public void adjustmentValueChanged(AdjustmentEvent e) {
+        if ((this.header != null) && (this.header.isVisible())) {
+            this.header.revalidate();
+        }
     }
 
     protected JLabel createHeaderLabel() {
@@ -138,6 +159,30 @@ public class JCScrollPane extends JScrollPane implements AdjustmentListener {
         return this.alpha;
     }
 
+    public HeaderPane getHeader() {
+        return this.header;
+    }
+
+    public Color getHeaderDisabledForeground() {
+        return this.headerDisabledForeground;
+    }
+
+    public Font getHeaderFont() {
+        return this.headerFont;
+    }
+
+    public Color getHeaderForeground() {
+        return this.headerForeground;
+    }
+
+    public JLabel getHeaderLabel() {
+        return this.headerLabel;
+    }
+
+    public String getHeaderText() {
+        return this.headerLabel == null ? null : this.headerLabel.getText();
+    }
+
     public Image getImage() {
         return this.image;
     }
@@ -148,6 +193,21 @@ public class JCScrollPane extends JScrollPane implements AdjustmentListener {
 
     public Insets getVisibleInsets() {
         return this.visibleInsets;
+    }
+
+    protected void initHeader() {
+        setColumnHeaderView(this.header = new HeaderPane(
+                this.headerLabel = createHeaderLabel()));
+        setCorner("UPPER_RIGHT_CORNER",
+                this.upperRightCorner = new HeaderPane());
+        this.headerLabel.setBorder(new EmptyBorder(0, 7, 0, 0));
+        this.headerLabel.setOpaque(false);
+        getHorizontalScrollBar().addAdjustmentListener(this);
+        getVerticalScrollBar().addAdjustmentListener(this);
+    }
+
+    public boolean isHeaderVisible() {
+        return (this.headerVisible) && (this.columnHeader != null);
     }
 
     public boolean isImageOnly() {
@@ -173,8 +233,43 @@ public class JCScrollPane extends JScrollPane implements AdjustmentListener {
                 this.insideBorder));
     }
 
+    public void setColumnHeader(JViewport columnHeader) {
+        super.setColumnHeader(columnHeader);
+
+        if (columnHeader != null) {
+            columnHeader.setVisible(this.headerVisible);
+        }
+    }
+
+    public void setColumnHeaderView(Component view) {
+        super.setColumnHeaderView(view);
+
+        if (view != null) {
+            if (this.headerFont != null) {
+                updateHeaderProperty(view, "font", this.headerFont);
+            }
+
+            Color color = null;
+
+            if ((isEnabled()) && (this.headerForeground != null)) {
+                color = this.headerForeground;
+            } else if ((!isEnabled())
+                    && (this.headerDisabledForeground != null)) {
+                color = this.headerDisabledForeground;
+            }
+
+            if (color != null) {
+                updateHeaderProperty(view, "foreground", color);
+            }
+        }
+    }
+
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
+
+        if (this.header != null) {
+            this.header.setEnabled(enabled);
+        }
 
         if (this.upperRightCorner != null) {
             this.upperRightCorner.setEnabled(enabled);
@@ -183,6 +278,54 @@ public class JCScrollPane extends JScrollPane implements AdjustmentListener {
         if ((this.viewport != null)
                 && ((view = this.viewport.getView()) != null)) {
             view.setEnabled(enabled);
+        }
+        Component headerView;
+        if ((this.columnHeader != null)
+                && ((headerView = this.columnHeader.getView()) != null)) {
+            updateHeaderProperty(headerView, "foreground",
+                    enabled ? this.headerForeground
+                            : this.headerDisabledForeground);
+        }
+    }
+
+    public void setHeaderDisabledForeground(Color headerDisabledForeground) {
+        this.headerDisabledForeground = headerDisabledForeground;
+        Component view;
+        if ((!isEnabled()) && (this.columnHeader != null)
+                && ((view = this.columnHeader.getView()) != null)) {
+            updateHeaderProperty(view, "foreground", headerDisabledForeground);
+        }
+    }
+
+    public void setHeaderFont(Font headerFont) {
+        this.headerFont = headerFont;
+        Component view;
+        if ((this.columnHeader != null)
+                && ((view = this.columnHeader.getView()) != null)) {
+            updateHeaderProperty(view, "font", headerFont);
+        }
+    }
+
+    public void setHeaderForeground(Color headerForeground) {
+        this.headerForeground = headerForeground;
+        Component view;
+        if ((isEnabled()) && (this.columnHeader != null)
+                && ((view = this.columnHeader.getView()) != null)) {
+            updateHeaderProperty(view, "foreground", headerForeground);
+        }
+    }
+
+    public void setHeaderText(String text) {
+        if (this.headerLabel != null) {
+            this.headerLabel.setText(text);
+        }
+    }
+
+    public void setHeaderVisible(boolean visible) {
+        this.headerVisible = visible;
+
+        if (this.columnHeader != null) {
+            this.columnHeader.setVisible(this.headerVisible);
         }
     }
 
@@ -208,6 +351,21 @@ public class JCScrollPane extends JScrollPane implements AdjustmentListener {
     public void setVisibleInsets(int top, int left, int bottom, int right) {
         this.visibleInsets.set(top, left, bottom, right);
         repaint();
+    }
+
+    private void updateHeaderProperty(Component c, String propertyName,
+                                      Object value) {
+        if (propertyName.equals("font")) {
+            c.setFont((Font) value);
+        } else if (propertyName.equals("foreground")) {
+            c.setForeground((Color) value);
+        }
+
+        if ((c instanceof Container)) {
+            for (Component child : ((Container) c).getComponents()) {
+                updateHeaderProperty(child, propertyName, value);
+            }
+        }
     }
 
     @Deprecated

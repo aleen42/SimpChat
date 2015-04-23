@@ -326,16 +326,11 @@ public class UIResourceManager {
         putImage("ScrollTableShowMenuButtonPressedImage",
                 (Image) imageMap.get("TableHeaderPressedImage"));
         putImage("ScrollBarUpImage", getImageByName("scrollbar_up.png", true));
-        putImage("ScrollBarUpRolloverImage",
-                getImageByName("scrollbar_up_r.png", true));
-        putImage("ScrollBarUpPressedImage",
-                getImageByName("scrollbar_up_p.png", true));
-        putImage("ScrollBarDownImage",
-                getImageByName("scrollbar_down.png", true));
-        putImage("ScrollBarDownRolloverImage",
-                getImageByName("scrollbar_down_r.png", true));
-        putImage("ScrollBarDownPressedImage",
-                getImageByName("scrollbar_down_p.png", true));
+        putImage("ScrollBarUpRolloverImage", getImageByName("scrollbar_up_r.png", true));
+        putImage("ScrollBarUpPressedImage", getImageByName("scrollbar_up_p.png", true));
+        putImage("ScrollBarDownImage", getImageByName("scrollbar_down.png", true));
+        putImage("ScrollBarDownRolloverImage", getImageByName("scrollbar_down_r.png", true));
+        putImage("ScrollBarDownPressedImage", getImageByName("scrollbar_down_p.png", true));
         putImage("ScrollBarRightImage",
                 getImageByName("scrollbar_right.png", true));
         putImage("ScrollBarRightRolloverImage",

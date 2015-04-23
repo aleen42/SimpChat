@@ -1,32 +1,36 @@
 package com.Simp;
 
 import java.awt.Color;
+import java.awt.Insets;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.basic.BasicLabelUI;
+import javax.swing.plaf.basic.BasicViewportUI;
 
-import com.java.ui.componentc.CScrollBarUI;
+import com.java.ui.componentc.*;
 import com.java.ui.util.UIResourceManager;
 import com.java.ui.util.UIUtil;
+
 
 public class ScrollBox extends JScrollPane {
 	
 	private Border insideBorder;
     private Border outsideBorder;
+    private float alpha;
+    private Insets visibleInsets;
 	
-	protected class CScrollBar extends JScrollPane.ScrollBar {
-        private static final long serialVersionUID = -8174518362746135594L;
+	protected class ScrollBox_ScrollBar extends JScrollPane.ScrollBar {
 
-        public CScrollBar(int orientation) {
+        public ScrollBox_ScrollBar(int orientation) {
             super(orientation);
-            setUI(new CScrollBarUI());
+            setUI(new CScrollBarUI(Color.WHITE, Color.WHITE));
             setOpaque(false);
             setBorder(null);
         }
-
+        
         @Deprecated
         public void updateUI() {
         }
@@ -39,29 +43,53 @@ public class ScrollBox extends JScrollPane {
 	ScrollBox(JList list)
 	{
 		super(list, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		super.setBorder(new CompoundBorder(this.outsideBorder = super
-                .getBorder(), this.insideBorder = new EmptyBorder(1, 1, 1, 1)));											//Clear Border
+		super.setBorder(new CompoundBorder(this.outsideBorder = super.getBorder(), this.insideBorder = new EmptyBorder(1, 1, 1, 1)));											//Clear Border
 		super.setOpaque(false);
-		setBackground(Color.GRAY);
-        setForeground(Color.BLACK);
+//		setBackground(Color.RED);
+        setForeground(Color.WHITE);
         setFont(UIUtil.getDefaultFont());
-        setCorner("LOWER_RIGHT_CORNER", createLowerRightCorner());
+        createVerticalScrollBar();
+        createHorizontalScrollBar();
+        createViewport();
+        this.visibleInsets = new Insets(1, 1, 1, 1);				//without border
+        setBorder(null);
+//        getViewport().setOpaque(false);
 	}
 	
-	private JComponent createLowerRightCorner() {
-        JLabel label = new JLabel(
-                UIResourceManager.getIcon("ScrollPaneLowerRightCornerIcon")) {
-            private static final long serialVersionUID = 5657359502965563304L;
-
-            @Deprecated
-            public void updateUI() {
-            }
-        };
-        label.setUI(new BasicLabelUI() {
-            protected void installDefaults(JLabel c) {
+	public JScrollBar createVerticalScrollBar() 
+	{
+        return new ScrollBox_ScrollBar(1);
+    }
+	
+	public JScrollBar createHorizontalScrollBar() 
+	{
+        return new ScrollBox_ScrollBar(0);
+    }
+	
+	protected JViewport createViewport() {
+        JViewport viewport = new JViewport();
+        viewport.setUI(new BasicViewportUI() 
+        {
+            protected void installDefaults(JComponent c) 
+            {
             }
         });
-        label.setOpaque(false);
-        return label;
+//        viewport.setFont(UIUtil.getDefaultFont());
+//        viewport.setForeground(Color.BLACK);
+//        viewport.setBackground(UIResourceManager.getEmptyColor());
+//        viewport.setBackground(Color.BLACK);
+        viewport.setOpaque(false);
+        return viewport;
     }
+	
+	public void setBorder(Border border) 
+	{									
+        if ((border == null) && (this.visibleInsets != null)) 
+        {
+            this.visibleInsets.set(0, 0, 0, 0);
+        }
+        this.outsideBorder = border;
+        super.setBorder(new CompoundBorder(this.outsideBorder, this.insideBorder));
+    }
+	
 }
