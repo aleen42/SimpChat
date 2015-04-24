@@ -13,6 +13,8 @@ public class SimpChat extends JFrame
 	private int point_x, point_y;
 	private boolean isDragging = false;
 	private boolean isUserListShown = false;
+	private static JLabel Name;
+	public static String User_name = "Name";
 //	private TrayIcon trayIcon = null; // Icon
 //	private SystemTray tray = null; // Task Bar
 
@@ -129,12 +131,16 @@ public class SimpChat extends JFrame
 		});
 		Minimize_Button.setBounds(351, 4, 28, 28);
 		contentPane.add(Minimize_Button);
-	
-//		if (SystemTray.isSupported()) 
-//		{ // 如果操作系统支持托盘
-//			this.tray();
-//		}
 		
+		
+		
+		/* Name Label */
+		Name = new JLabel(User_name);
+		Name.setFont(new Font("Arial", Font.PLAIN, 33));
+		Name.setForeground(new Color(161, 0, 0));
+		Name.setBounds(48, 46, 185, 39);
+		Name.setVisible(false);
+		contentPane.add(Name);
 		
 		/* Drag Handler */
 		this.addMouseListener(new MouseAdapter() 
@@ -163,6 +169,18 @@ public class SimpChat extends JFrame
 			    } 
 			}
 		}); 
+		
+		
+//		if (SystemTray.isSupported()) 
+//		{ // 如果操作系统支持托盘
+//			this.tray();
+//		}
+	}
+	
+	public static void update_UserName_Label()
+	{
+		Name.setText(User_name);
+		Name.setVisible(true);
 	}
 	
 	public void Show_UserList(boolean isthere, JPanel userlist_window)

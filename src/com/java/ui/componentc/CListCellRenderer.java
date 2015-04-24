@@ -2,17 +2,25 @@ package com.java.ui.componentc;
 
 import com.java.ui.util.UIResourceManager;
 import com.java.ui.util.UIUtil;
+
 import sun.awt.AppContext;
 
 import javax.swing.*;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicLabelUI;
+
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.Serializable;
 
-public class CListCellRenderer extends JLabel implements ListCellRenderer,
-        Serializable {
-    private static class RendererUI extends BasicLabelUI {
+public class CListCellRenderer extends JLabel implements ListCellRenderer, Serializable 
+{
+	private static final java.awt.Color mouseEnter_Font_Color = Color.BLACK;
+	private static final java.awt.Color mousePressed_Font_Color = Color.WHITE;
+	private static final java.awt.Color static_Font_Color = new Color(140, 140, 140);
+    private static class RendererUI extends BasicLabelUI 
+    {
         private static final Image BG_IMAGE = UIResourceManager
                 .getImage("SelectedItemBackgroundImage");
 
@@ -20,6 +28,7 @@ public class CListCellRenderer extends JLabel implements ListCellRenderer,
                 .getImage("SelectedItemDisabledBackgroundImage");
 
         private static final Object RENDERER_UI_KEY = new Object();
+        
 
         protected static RendererUI rendererUI = new RendererUI();
 
@@ -57,8 +66,7 @@ public class CListCellRenderer extends JLabel implements ListCellRenderer,
                     image = BG_IMAGE;
                 }
 
-                UIUtil.paintImage(g, image, new Insets(1, 1, 1, 1), paintRect,
-                        c);
+                UIUtil.paintImage(g, image, new Insets(1, 1, 1, 1), paintRect, c);
             } else {
                 g.setColor(c.getBackground());
                 g.fillRect(0, 0, c.getWidth(), c.getHeight());
@@ -82,10 +90,19 @@ public class CListCellRenderer extends JLabel implements ListCellRenderer,
     public CListCellRenderer() {
         setUI(new RendererUI());
         setBorder(UIResourceManager.getBorder("ListRendererBorder"));
+//        this.addMouseListener(new MouseAdapter() {					/* Listen to the select */
+//        	public void mouseEntered(MouseEvent e)
+//        	{
+//        		setForeground(mouseEnter_Font_Color);
+//        	}
+//        	public void mouseExited(MouseEvent e)
+//        	{
+//        		setForeground(static_Font_Color);
+//        	}	
+//		});
     }
 
-    public Component getListCellRendererComponent(JList list, Object value,
-                                                  int index, boolean isSelected, boolean cellHasFocus) {
+    public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
         if ((value instanceof Icon)) {
             setIcon((Icon) value);
         } else {
@@ -94,11 +111,10 @@ public class CListCellRenderer extends JLabel implements ListCellRenderer,
 
         this.list = list;
         this.selected = isSelected;
-        Color fg = list.getForeground();
-
-        if (((list instanceof JCList)) && (!list.isEnabled())) {
-            fg = ((JCList) list).getDisabledForeground();
-        }
+//        Color fg = list.getForeground();
+//        if (((list instanceof JCList)) && (!list.isEnabled())) {
+//            fg = ((JCList) list).getDisabledForeground();
+//        }
 
         if ((list instanceof JCList)) {
             JCList cList = (JCList) list;
@@ -112,7 +128,7 @@ public class CListCellRenderer extends JLabel implements ListCellRenderer,
         }
 
         setFont(list.getFont());
-        setForeground(isSelected ? list.getSelectionForeground() : fg);
+        setForeground(isSelected ? mousePressed_Font_Color : static_Font_Color);
         return this;
     }
 

@@ -42,7 +42,7 @@ public class ScrollBox extends JScrollPane {
 	}
 	ScrollBox(JList list)
 	{
-		super(list, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		super(list, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		super.setBorder(new CompoundBorder(this.outsideBorder = super.getBorder(), this.insideBorder = new EmptyBorder(1, 1, 1, 1)));											//Clear Border
 		super.setOpaque(false);
 //		setBackground(Color.RED);
