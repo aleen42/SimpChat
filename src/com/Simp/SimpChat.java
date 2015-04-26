@@ -6,23 +6,28 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.*;
 
+import com.java.ui.componentc.JCTextField;
 import com.sun.awt.AWTUtilities;
 
 public class SimpChat extends JFrame
 {
+	
 	private JPanel contentPane;
 	private int point_x, point_y;
 	private boolean isDragging = false;
 	private boolean isUserListShown = false;
+	
+	
 	private static JLabel Name_Label;
 	private static JLabel IPV4_Label;
 	public static String User_name = "Name";
 	public static String IPV4_adress = "0.0.0.0";
 	public static JPanel Add_user_panel;
+	public static JTextField User_name_textbox;
+	public static JTextField Ip_textbox;
 //	private TrayIcon trayIcon = null; // Icon
 //	private SystemTray tray = null; // Task Bar
 
-	private final JPanel panel = new JPanel();
 	/**
 	 * Launch the application.
 	 */
@@ -51,30 +56,53 @@ public class SimpChat extends JFrame
 	 */
 	public SimpChat() 
 	{
-		panel.setLayout(null);
-
 		setUndecorated(true);	 																	//Without Border
 		AWTUtilities.setWindowOpaque(this, false);													//Set Background Opaque to false
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Dimension scrSize = Toolkit.getDefaultToolkit().getScreenSize();  							//Get the size of current screen
-		setBounds(0, 0, (int)(scrSize.width * 0.7), (int)(scrSize.height * 0.8));	
+		setBounds(0, 0, (int)(scrSize.width * 0.8), (int)(scrSize.height * 0.9));	
 		setLocation((scrSize.width - getWidth()) / 2, (scrSize.height - getHeight()) / 2);			//Startup location set at the center of current screen 
 		
 		/* Background */
 		Image bg = this.getToolkit().getImage("./Pic/bg.png");										//Set a JPanel with a background
 		contentPane = new Background(bg);
 		contentPane.setOpaque(false);
-		contentPane.setBorder(new EmptyBorder(0, 0, 0, 0));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
 		/* Add_User_Panel */
         Image adduserPanel_bg = this.getToolkit().getImage("./Pic/AddUserPanel_bg.png");
 		Add_user_panel = new UIPanel(adduserPanel_bg);
-		Add_user_panel.setBounds(515, 180, 355, 263);
+		Add_user_panel.setBounds(525, 498, 514, 192);
 		Add_user_panel.setVisible(false);
 		getContentPane().add(Add_user_panel);
+		
+		/* User_name_textbox */
+		User_name_textbox = new JCTextField();
+		User_name_textbox.setFont(new Font("Microsoft JhengHei UI", Font.PLAIN, 15));
+		User_name_textbox.setBounds(102, 38, 382, 24);
+		Add_user_panel.add(User_name_textbox);
+		
+		/* Ip_textbox */
+		Ip_textbox = new JCTextField();
+		Ip_textbox.setFont(new Font("Microsoft JhengHei UI", Font.PLAIN, 15));
+		Ip_textbox.setBounds(102, 80, 382, 24);
+		Add_user_panel.add(Ip_textbox);
+		
+		/* lblUsername */
+		JLabel lblUsername = new JLabel("User_name");
+		lblUsername.setForeground(new Color(161, 0, 0));
+		lblUsername.setFont(new Font("Microsoft JhengHei UI", Font.PLAIN, 13));
+		lblUsername.setBounds(20, 40, 82, 22);
+		Add_user_panel.add(lblUsername);
+
+		/* lblIP */
+		JLabel lblIP = new JLabel("IP");
+		lblIP.setForeground(new Color(161, 0, 0));
+		lblIP.setFont(new Font("Microsoft JhengHei UI", Font.PLAIN, 13));
+		lblIP.setBounds(73, 83, 19, 22);
+		Add_user_panel.add(lblIP);
 		
 		/* User List */
 		
@@ -148,7 +176,7 @@ public class SimpChat extends JFrame
 		Name_Label = new JLabel(User_name);
 		Name_Label.setFont(new Font("Microsoft JhengHei UI", Font.PLAIN, 33));
 		Name_Label.setForeground(new Color(161, 0, 0));
-		Name_Label.setBounds(48, 46, 185, 39);
+		Name_Label.setBounds(48, 32, 185, 53);
 		Name_Label.setVisible(false);
 		contentPane.add(Name_Label);
 		
@@ -156,7 +184,7 @@ public class SimpChat extends JFrame
 		IPV4_Label = new JLabel(User_name);
 		IPV4_Label.setFont(new Font("Microsoft JhengHei UI", Font.PLAIN, 17));
 		IPV4_Label.setForeground(Color.BLACK);
-		IPV4_Label.setBounds(48, 90, 230, 39);
+		IPV4_Label.setBounds(48, 90, 230, 46);
 		IPV4_Label.setVisible(false);
 		contentPane.add(IPV4_Label);
 		

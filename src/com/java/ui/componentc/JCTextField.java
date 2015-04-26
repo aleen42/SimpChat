@@ -6,14 +6,24 @@ import com.java.ui.util.UIUtil;
 
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.text.Document;
+
 import java.awt.*;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
 
 public class JCTextField extends JTextField {
+
     private static final long serialVersionUID = -2877157868704955530L;
+    
+    private String text_value;
+    private BufferedImage buffer = null; 
     private float alpha;
     private boolean borderChange;
     private Border disabledBorder;
@@ -21,11 +31,13 @@ public class JCTextField extends JTextField {
     private Image image;
     private boolean imageOnly;
     private boolean leadingTextVisible;
+    private boolean isFocused;
     private MouseListener listener;
     private Border nonEditableBorder;
     private Border nonEditableRolloverBorder;
     private Border normalBorder;
     private Border rolloverBorder;
+    private Border focusBorder;
     private Insets visibleInsets;
 
     public JCTextField() {
@@ -45,29 +57,98 @@ public class JCTextField extends JTextField {
         setDisabledTextColor(new Color(123, 123, 122));
         setCursor(new Cursor(2));
         setMargin(new Insets(0, 0, 0, 0));
-        super.setBorder(this.normalBorder = new ImageBorder(UIResourceManager
-                .getImageByName("border_normal.png"), 5, 6, 3, 4));
+        super.setBorder(this.normalBorder = new ImageBorder(UIResourceManager.getImageByName("border_normal.png"), 5, 6, 3, 4));
         this.extender = new TextExtender(this);
         this.rolloverBorder = UIResourceManager.getBorder("TextRolloverBorder");
-        this.nonEditableBorder = UIResourceManager
-                .getBorder("TextNonEditableBorder");
-        this.nonEditableRolloverBorder = UIResourceManager
-                .getBorder("TextNonEditableRolloverBorder");
+        this.focusBorder = new ImageBorder(getToolkit().getImage("./Pic/border_focus.png"), 5, 6, 3, 4);
+//        this.rolloverBorder = new ImageBorder(UIResourceManager.getImageByName("border_rollover.png"));
+        this.nonEditableBorder = UIResourceManager.getBorder("TextNonEditableBorder");
+        this.nonEditableRolloverBorder = UIResourceManager.getBorder("TextNonEditableRolloverBorder");
         this.disabledBorder = UIResourceManager.getBorder("TextDisabledBorder");
         this.alpha = 1.0F;
         this.visibleInsets = new Insets(1, 1, 1, 1);
         this.borderChange = true;
         this.leadingTextVisible = true;
-        this.listener = new MouseAdapter() {
-            public void mouseEntered(MouseEvent e) {
+        
+        addMouseListener(new MouseAdapter() 
+        {
+            public void mouseEntered(MouseEvent e) 
+            {
                 JCTextField.this.mouseIn();
             }
 
-            public void mouseExited(MouseEvent e) {
+            public void mouseExited(MouseEvent e) 
+            {
                 JCTextField.this.mouseOut();
             }
-        };
-        addMouseListener(this.listener);
+        });
+        
+        addFocusListener(new FocusAdapter()
+        {
+        	public void focusGained(FocusEvent e)
+        	{
+        		isFocused = true;
+        		JCTextField.this.gotfocus();
+        	}
+        	
+        	public void focusLost(FocusEvent e)
+        	{
+        		isFocused = false;
+        		JCTextField.this.lostfocus();
+        	}
+        });
+        
+        getDocument().addDocumentListener(new DocumentListener(){
+        	public void insertUpdate(DocumentEvent e) 
+        	{
+        		JCTextField.this.text_value = getText();
+            }
+
+             public void removeUpdate(DocumentEvent e) 
+             {
+            	 JCTextField.this.text_value = getText();
+             }
+        	
+        	public void changedUpdate(DocumentEvent e)
+        	{
+        		JCTextField.this.text_value = getText();
+            }
+        });
+    }
+    
+    @Override 
+    public void paintComponent(Graphics g) { 												//重新绘制缓冲，解决输入法导致透明panel变白的问题 			
+        Component window = this.getTopLevelAncestor();  
+        if (window instanceof Window && !((Window)window).isOpaque()) {  
+            // This is a translucent window, so we need to draw to a buffer  
+            // first to work around a bug in the DirectDraw rendering in Swing.  
+            int w = this.getWidth();  
+            int h = this.getHeight();  
+            if (buffer == null || buffer.getWidth() != w || buffer.getHeight() != h) {  
+                // Create a new buffer based on the current size.  
+                GraphicsConfiguration gc = this.getGraphicsConfiguration();  
+                buffer = gc.createCompatibleImage(w, h, BufferedImage.TRANSLUCENT);  
+            }  
+
+            // Use the super class's paintComponent implementation to draw to  
+            // the buffer, then write that buffer to the original Graphics object.  
+            Graphics bufferGraphics = buffer.createGraphics();  
+            try {  
+                super.paintComponent(bufferGraphics);  
+            } finally {  
+                bufferGraphics.dispose();  
+            }  
+            g.drawImage(buffer, 0, 0, w, h, 0, 0, w, h, null);  
+        } else {  
+            // This is not a translucent window, so we can call the super class  
+            // implementation directly.  
+            super.paintComponent(g);  
+        }          
+    }  
+    
+    public String getvalue()
+    {
+    	return this.text_value;
     }
 
     public JCTextField(int columns) {
@@ -112,16 +193,26 @@ public class JCTextField extends JTextField {
     }
 
     private void mouseIn() {
-        if ((this.normalBorder != null) && (isEnabled())) {
-            super.setBorder(isEditable() ? this.rolloverBorder
-                    : this.nonEditableRolloverBorder);
+        if ((this.normalBorder != null) && (isEnabled() && !isFocused)) {
+            super.setBorder(isEditable() ? this.rolloverBorder : this.nonEditableRolloverBorder);
         }
     }
 
     private void mouseOut() {
+        if ((this.normalBorder != null) && (isEnabled()) && !isFocused) {
+            super.setBorder(isEditable() ? this.normalBorder : this.nonEditableBorder);
+        }
+    }
+    
+    private void gotfocus() {
         if ((this.normalBorder != null) && (isEnabled())) {
-            super.setBorder(isEditable() ? this.normalBorder
-                    : this.nonEditableBorder);
+            super.setBorder(this.focusBorder);
+        }
+    }
+    
+    private void lostfocus() {
+        if ((this.normalBorder != null) && (isEnabled())) {
+        	super.setBorder(isEditable() ? this.normalBorder : this.nonEditableBorder);
         }
     }
 

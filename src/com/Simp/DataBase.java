@@ -50,12 +50,33 @@ public class DataBase {
 	    } 	
 	}
 	
-	public String get_ipv4(int id)							//get User_list
+	public String get_status(int index)
+	{
+		String reserve = "null";
+		
+        try 
+		{
+        	SQL = "select case User_status when 0 then 'offline' when 1 then 'online' end as User_status from (select dbo.Listen_User_Table.*, row_number() over (order by User_Name) rn from dbo.Listen_User_Table) as t where rn = " + index + ";";
+        	stmt = con.createStatement();    
+	        res = stmt.executeQuery(SQL); 
+        	res.next();														//next row
+            reserve = res.getString("User_status");
+            stmt.close();
+		}
+		// Handle any errors that may have occurred.    
+	    catch (Exception e) 
+		{    
+	        e.printStackTrace();    
+	    }
+		return reserve;
+	}
+	
+	public String get_ipv4(int index)							//get User_list
 	{
 		String reserve = "0.0.0.0";
 		try 
 		{
-			SQL = "select User_name,Ipv4_Adress,case User_status when 0 then 'offline' when 1 then 'online' end as User_status from dbo.Listen_User_Table where id = " + id;
+			SQL = "select t.* from (select dbo.Listen_User_Table.*, row_number() over (order by User_Name) rn from dbo.Listen_User_Table) as t where rn = " + index + ";";
 	        stmt = con.createStatement();    
 	        res = stmt.executeQuery(SQL);  
 			// Iterate through the data in the result set and display it.    
@@ -73,12 +94,12 @@ public class DataBase {
 		return reserve;
 	}
 	
-	public void delet_User(int id)
+	public void delet_User(int index)
 	{
 		try 
 		{
 			// Create and execute an SQL statement that returns some data.    
-	        String SQL = "delete from dbo.Listen_User_Table where Id = " + id;    
+	        String SQL = "delete t from (select dbo.Listen_User_Table.*, row_number() over (order by User_Name) rn from Chat.dbo.Listen_User_Table) as t where rn = " + index +";";    
 	        stmt = con.createStatement();    
 	        stmt.executeUpdate(SQL);
 	        stmt.close();

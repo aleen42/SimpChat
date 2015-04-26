@@ -15,7 +15,6 @@ public class UIPanel extends JPanel{
 		/* paint background */
 		this.img = img; 
         Dimension size = new Dimension(img.getWidth(null),img.getHeight(null)); 
-        
         setSize(new Dimension(200, 400));
         setMinimumSize(size); 
         setMaximumSize(size); 

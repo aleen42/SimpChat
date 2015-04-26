@@ -179,7 +179,7 @@ public class UIResourceManager {
     static {
         putColor("EmptyColor", new Color(0, 0, 0, 0));
         putColor("WhiteColor", new Color(254, 255, 255));
-        putColor("TextDisabledBackground", new Color(250, 250, 249));
+        putColor("TextDisabledBackground", new Color(20, 20, 20));
         putColor("TextSelectionForeground", getColor("WhiteColor"));
         putColor("TextSelectionColor", new Color(49, 106, 197));
         putColor("TextNonEditableBackground", new Color(235, 235, 235));

@@ -12,7 +12,7 @@ import javax.swing.JButton;
 public class Button extends JButton 
 { 
 	
-    public Button(ImageIcon icon, ImageIcon mouseover, ImageIcon pressed, int type) 
+    Button(ImageIcon icon, ImageIcon mouseover, ImageIcon pressed, int type) 
     { 
         setSize(icon.getImage().getWidth(null),icon.getImage().getHeight(null)); 
         setIcon(icon); 

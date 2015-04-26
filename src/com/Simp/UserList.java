@@ -60,9 +60,10 @@ public class UserList extends JPanel {
 			{
 				SimpChat.update_AddUser_Label(isAddUserPanelShown);
 				isAddUserPanelShown = !isAddUserPanelShown;
+				SimpChat.User_name_textbox.requestFocus();							//the component gets focus
 			}
 		});
-		Useradd_Button.setBounds(112, 41, 25, 29);
+		Useradd_Button.setBounds(128, 361, 25, 29);
 		add(Useradd_Button);
 		
 		/* UserDelete Button */
@@ -85,7 +86,7 @@ public class UserList extends JPanel {
 				index = 0;
 			}
 		});
-		Userdelete_Button.setBounds(149, 41, 25, 29);
+		Userdelete_Button.setBounds(165, 361, 25, 29);
 		add(Userdelete_Button);
         
 //        DefaultListModel model = new DefaultListModel(); 
@@ -118,11 +119,7 @@ public class UserList extends JPanel {
 //        	return value;
 //        	}
 //        	});
-		
-		
-        
-        
-        
+
         /* List_panel */
         listItem = new DefaultListModel();
         UpdateList();
@@ -149,7 +146,7 @@ public class UserList extends JPanel {
 		});
         ScrollBox scroll_list = new ScrollBox(list);
 //        JCScrollPane scroll_list = new JCScrollPane(list);
-        scroll_list.setBounds(20, 80, 170, 310);
+        scroll_list.setBounds(20, 40, 170, 300);
 //        scroll_list.setImage(img);
         add(scroll_list);
         SwingUtilities.updateComponentTreeUI (scroll_list);

@@ -15,7 +15,7 @@ public class OptimalFont {
 	private static final String FALLBACK_FONT_FAMILY_NAME = Font.SANS_SERIF;
     private static final Map<String, String> FONT_FAMILY_NAMES = new HashMap<>();
     private static final String[] BEST_FONT_FAMILIES = {"Î¢ÈíÑÅºÚ", "arial", "sans-serif", "Microsoft JhengHei UI"};
-    private static final int BEST_FONT_SIZE = 12; // 12px
+    private static final int BEST_FONT_SIZE = 16; // 12px
  
     static {
         GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -81,12 +81,7 @@ public class OptimalFont {
         for (Map.Entry<Object, Object> entry : UIManager.getDefaults().entrySet()) {
             if (entry.getValue() instanceof FontUIResource) {
                 FontUIResource fontUIRes = (FontUIResource) entry.getValue();
-                entry.setValue(new FontUIResource(
-                        bestFontFamily,
-                        fontUIRes.getStyle(),
-                        getBestFontSize() > fontUIRes.getSize() ?
-                                getBestFontSize() : fontUIRes.getSize()
-                ));
+                entry.setValue(new FontUIResource(bestFontFamily, fontUIRes.getStyle(), getBestFontSize() > fontUIRes.getSize() ? getBestFontSize() : fontUIRes.getSize()));
             }
         }
     }
