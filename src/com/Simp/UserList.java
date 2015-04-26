@@ -20,19 +20,30 @@ import javax.swing.border.LineBorder;
 
 import com.java.ui.componentc.*;
 
-public class UserList extends JPanel {
+import javax.swing.GroupLayout.Alignment;
 
+public class UserList extends JPanel {
 	
 	private Image img;
-	private DefaultListModel listItem;
 	private JList list;
+	private int index;
 	
+	private static final int empty_size = 2;
+	private DataBase db = new DataBase();
+	private static DefaultListModel listItem;
+	public static String User_name_store;
+	public static boolean isAddUserPanelShown = false;
+	public static void add_item()
+	{
+		listItem.addElement(User_name_store);
+	}
 	
 	public UserList(Image img) 
     { 
+		/* paint background */
         this.img = img; 
         Dimension size = new Dimension(img.getWidth(null),img.getHeight(null)); 
-        setSize(new Dimension(200, 400));
+        setSize(new Dimension(533, 400));
         setMinimumSize(size); 
         setMaximumSize(size); 
         setLayout(null);
@@ -47,43 +58,31 @@ public class UserList extends JPanel {
 		{
 			public void actionPerformed(ActionEvent arg0) 
 			{
-//				setExtendedState(ICONIFIED);
-//				try 
-//				{
-//					tray.add(trayIcon); // 将托盘图标添加到系统的托盘实例中
-////					setVisible(false); // 使窗口不可视
-//					dispose();
-//			    } 
-//				catch (AWTException e) 
-//				{
-//					e.printStackTrace();
-//			    }
+				SimpChat.update_AddUser_Label(isAddUserPanelShown);
+				isAddUserPanelShown = !isAddUserPanelShown;
 			}
 		});
 		Useradd_Button.setBounds(112, 41, 25, 29);
 		add(Useradd_Button);
 		
 		/* UserDelete Button */
-		ImageIcon userdelete = new ImageIcon("./Pic/UserDelete_static.png");
+		ImageIcon userdelete_button_bg = new ImageIcon("./Pic/UserDelete_static.png");
 		ImageIcon userdelete_button_mouseover = new ImageIcon("./Pic/UserDelete_mouseover.png");
 		ImageIcon userdelete_button_pressed = new ImageIcon("./Pic/UserDelete_pressed.png");
-		JButton Userdelete_Button = new Button(useradd_button_bg, useradd_button_mouseover, useradd_button_pressed, 1);
+		JButton Userdelete_Button = new Button(userdelete_button_bg, userdelete_button_mouseover, userdelete_button_pressed, 1);
 		Userdelete_Button.setOpaque(false);
 		Userdelete_Button.addActionListener(new ActionListener() 
 		{
 			public void actionPerformed(ActionEvent arg0) 
-			{
-//				setExtendedState(ICONIFIED);
-//				try 
-//				{
-//					tray.add(trayIcon); // 将托盘图标添加到系统的托盘实例中
-////					setVisible(false); // 使窗口不可视
-//					dispose();
-//			    } 
-//				catch (AWTException e) 
-//				{
-//					e.printStackTrace();
-//			    }
+			{								
+				if(index - empty_size + 1 <= 0)//no select
+					return;
+				db.delet_User(index - empty_size + 1);
+				listItem.remove(index);							//delete selected user
+				/* hide labe */
+				SimpChat.update_UserName_Label(false);	
+				SimpChat.update_IPV4_Label(false);
+				index = 0;
 			}
 		});
 		Userdelete_Button.setBounds(149, 41, 25, 29);
@@ -119,37 +118,57 @@ public class UserList extends JPanel {
 //        	return value;
 //        	}
 //        	});
+		
+		
+        
+        
+        
+        /* List_panel */
         listItem = new DefaultListModel();
         UpdateList();
         list = new JList(listItem);
         list.setCellRenderer(new CListCellRenderer());
+        list.setFont(new Font("Microsoft JhengHei UI", Font.PLAIN, 15));
         list.addMouseListener(new MouseAdapter() {					/* Listen to the select */
         	public void mouseReleased(MouseEvent e)
         	{
+        		index = list.getSelectedIndex();
         		SimpChat.User_name = list.getSelectedValue().toString();
-        		SimpChat.update_UserName_Label();
+        		if(SimpChat.User_name == " ")
+        		{
+        			SimpChat.update_UserName_Label(false);
+        			SimpChat.update_IPV4_Label(false);
+        			return;
+        		}	
+        		SimpChat.update_UserName_Label(true);
+        		SimpChat.IPV4_adress = db.get_ipv4(index - empty_size + 1);
+        		SimpChat.update_IPV4_Label(true);
+        		
         	}
         	
 		});
         ScrollBox scroll_list = new ScrollBox(list);
 //        JCScrollPane scroll_list = new JCScrollPane(list);
-        scroll_list.setBounds(10, 80, 180, 310);
+        scroll_list.setBounds(20, 80, 170, 310);
 //        scroll_list.setImage(img);
         add(scroll_list);
         SwingUtilities.updateComponentTreeUI (scroll_list);
-//        JCScrollPane jscrollPanel = new JCScrollPane(list);
-//        jscrollPanel.setOpaque(false);
-//        jscrollPanel.getViewport().setOpaque(false);
-//        jscrollPanel.setBounds(10, 59, 180, 331);
+          
         setVisible(false);
     } 
 	
 	
 	protected void UpdateList()
 	{
-		for(int i = 1; i <= 20; i++)
+		
+		for(int i = 1; i <= empty_size; i++)
 	    {
-			listItem.addElement("Aleen" + i);
+			listItem.addElement(" ");
+	    }
+		db.get_User_name();
+		for(int i = 1; i <= empty_size; i++)
+	    {
+			listItem.addElement(" ");
 	    }
 	}
 	//Override paintComponent 
@@ -157,6 +176,4 @@ public class UserList extends JPanel {
     { 
         g.drawImage(img, 0, 0, null); 
     } 
-    
-    
 }

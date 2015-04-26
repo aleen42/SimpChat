@@ -2,6 +2,7 @@ package com.Simp;
 
 import java.awt.*;
 import java.awt.event.*;
+
 import javax.swing.*;
 import javax.swing.border.*;
 
@@ -13,8 +14,11 @@ public class SimpChat extends JFrame
 	private int point_x, point_y;
 	private boolean isDragging = false;
 	private boolean isUserListShown = false;
-	private static JLabel Name;
+	private static JLabel Name_Label;
+	private static JLabel IPV4_Label;
 	public static String User_name = "Name";
+	public static String IPV4_adress = "0.0.0.0";
+	public static JPanel Add_user_panel;
 //	private TrayIcon trayIcon = null; // Icon
 //	private SystemTray tray = null; // Task Bar
 
@@ -30,6 +34,7 @@ public class SimpChat extends JFrame
 			{
 				try 
 				{
+					OptimalFont.setUI();					//¿¹¾â³Ý×ÖÌå
 					SimpChat frame = new SimpChat();
 					frame.setVisible(true);
 				} 
@@ -53,7 +58,7 @@ public class SimpChat extends JFrame
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Dimension scrSize = Toolkit.getDefaultToolkit().getScreenSize();  							//Get the size of current screen
-		setBounds(0, 0, (int)(scrSize.width * 0.3) + 200, (int)(scrSize.height * 0.8));	
+		setBounds(0, 0, (int)(scrSize.width * 0.7), (int)(scrSize.height * 0.8));	
 		setLocation((scrSize.width - getWidth()) / 2, (scrSize.height - getHeight()) / 2);			//Startup location set at the center of current screen 
 		
 		/* Background */
@@ -63,6 +68,13 @@ public class SimpChat extends JFrame
 		contentPane.setBorder(new EmptyBorder(0, 0, 0, 0));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		
+		/* Add_User_Panel */
+        Image adduserPanel_bg = this.getToolkit().getImage("./Pic/AddUserPanel_bg.png");
+		Add_user_panel = new UIPanel(adduserPanel_bg);
+		Add_user_panel.setBounds(515, 180, 355, 263);
+		Add_user_panel.setVisible(false);
+		getContentPane().add(Add_user_panel);
 		
 		/* User List */
 		
@@ -132,15 +144,21 @@ public class SimpChat extends JFrame
 		Minimize_Button.setBounds(351, 4, 28, 28);
 		contentPane.add(Minimize_Button);
 		
-		
-		
 		/* Name Label */
-		Name = new JLabel(User_name);
-		Name.setFont(new Font("Arial", Font.PLAIN, 33));
-		Name.setForeground(new Color(161, 0, 0));
-		Name.setBounds(48, 46, 185, 39);
-		Name.setVisible(false);
-		contentPane.add(Name);
+		Name_Label = new JLabel(User_name);
+		Name_Label.setFont(new Font("Microsoft JhengHei UI", Font.PLAIN, 33));
+		Name_Label.setForeground(new Color(161, 0, 0));
+		Name_Label.setBounds(48, 46, 185, 39);
+		Name_Label.setVisible(false);
+		contentPane.add(Name_Label);
+		
+		/* IPV4 Label */
+		IPV4_Label = new JLabel(User_name);
+		IPV4_Label.setFont(new Font("Microsoft JhengHei UI", Font.PLAIN, 17));
+		IPV4_Label.setForeground(Color.BLACK);
+		IPV4_Label.setBounds(48, 90, 230, 39);
+		IPV4_Label.setVisible(false);
+		contentPane.add(IPV4_Label);
 		
 		/* Drag Handler */
 		this.addMouseListener(new MouseAdapter() 
@@ -177,15 +195,31 @@ public class SimpChat extends JFrame
 //		}
 	}
 	
-	public static void update_UserName_Label()
+	public static void update_AddUser_Label(boolean visible)
 	{
-		Name.setText(User_name);
-		Name.setVisible(true);
+		Add_user_panel.setVisible(!visible);
+	}
+	
+	public static void update_UserName_Label(boolean visible)
+	{
+		Name_Label.setVisible(visible);
+		Name_Label.setText(User_name);
+	}
+	
+	public static void update_IPV4_Label(boolean visible)
+	{
+		IPV4_Label.setVisible(visible);
+		IPV4_Label.setText("IP: " + IPV4_adress);
 	}
 	
 	public void Show_UserList(boolean isthere, JPanel userlist_window)
 	{
+		if(isthere)
+			Add_user_panel.setVisible(false);
+		else
+			Add_user_panel.setVisible(UserList.isAddUserPanelShown);
 		userlist_window.setVisible(!isthere);
 		isUserListShown = !isthere;
+		
 	}
 }

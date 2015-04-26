@@ -1,5 +1,6 @@
 package com.java.ui.componentc;
 
+import com.Simp.SimpChat;
 import com.java.ui.util.UIResourceManager;
 import com.java.ui.util.UIUtil;
 
@@ -103,12 +104,19 @@ public class CListCellRenderer extends JLabel implements ListCellRenderer, Seria
     }
 
     public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-        if ((value instanceof Icon)) {
+        
+    	if ((value instanceof Icon)) {
             setIcon((Icon) value);
         } else {
             setText(value == null ? "" : value.toString());
         }
 
+    	if(value.equals(" "))					// for empty element
+    	{
+    		this.selected = false;
+    		return this;
+    	}
+    	
         this.list = list;
         this.selected = isSelected;
 //        Color fg = list.getForeground();

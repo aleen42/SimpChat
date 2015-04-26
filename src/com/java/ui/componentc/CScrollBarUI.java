@@ -1,11 +1,13 @@
 package com.java.ui.componentc;
 
+import com.Simp.UserList;
 import com.java.ui.util.UIResourceManager;
 
 import javax.swing.*;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicScrollBarUI;
+
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -112,17 +114,17 @@ public class CScrollBarUI extends BasicScrollBarUI implements MouseListener {
         Image image = null;
         boolean vertical = this.scrollbar.getOrientation() == 1;
 
-        if (this.pressed) {
-            image = UIResourceManager
-                    .getImage(vertical ? "ScrollBarVPressedImage"
-                            : "ScrollBarHPressedImage");
-        } else if (isThumbRollover()) {
-            image = UIResourceManager
-                    .getImage(vertical ? "ScrollBarVRolloverImage"
-                            : "ScrollBarHRolloverImage");
-        } else {
-            image = UIResourceManager.getImage(vertical ? "ScrollBarVImage"
-                    : "ScrollBarHImage");
+        if (this.pressed) 
+        {
+            image = UIResourceManager.getImage(vertical ? "ScrollBarVPressedImage" : "ScrollBarHPressedImage");
+        } 
+        else if (isThumbRollover()) 
+        {
+            image = UIResourceManager.getImage(vertical ? "ScrollBarVRolloverImage" : "ScrollBarHRolloverImage");
+        } 
+        else 
+        {
+            image = UIResourceManager.getImage(vertical ? "ScrollBarVImage" : "ScrollBarHImage");
         }
 
         return image;
@@ -176,7 +178,6 @@ public class CScrollBarUI extends BasicScrollBarUI implements MouseListener {
         if ((thumbBounds.isEmpty()) || (!this.scrollbar.isEnabled())) {
             return;
         }
-
         Image image = getThumbImage();
         int width = thumbBounds.width;
         int height = thumbBounds.height;
@@ -186,22 +187,21 @@ public class CScrollBarUI extends BasicScrollBarUI implements MouseListener {
 
         if (this.scrollbar.getOrientation() == 1) {
             g.drawImage(image, 0, 0, width, 3, 0, 0, imageWidth, 3, null);
-            g.drawImage(image, 0, 3, width, height - 3, 0, 3, imageWidth,
-                    imageHeight - 3, null);
-            g.drawImage(image, 0, height - 3, width, height, 0,
-                    imageHeight - 3, imageWidth, imageHeight, null);
+            g.drawImage(image, 0, 3, width, height - 3, 0, 3, imageWidth, imageHeight - 3, null);
+            g.drawImage(image, 0, height - 3, width, height, 0, imageHeight - 3, imageWidth, imageHeight, null);
+            
         } else {
             g.drawImage(image, 0, 0, 3, height, 0, 0, 3, imageHeight, null);
-            g.drawImage(image, 3, 0, width - 3, height, 3, 0, imageWidth - 3,
-                    imageHeight, null);
-            g.drawImage(image, width - 3, 0, width, height, imageWidth - 3, 0,
-                    imageWidth, imageHeight, null);
+            g.drawImage(image, 3, 0, width - 3, height, 3, 0, imageWidth - 3, imageHeight, null);
+            g.drawImage(image, width - 3, 0, width, height, imageWidth - 3, 0, imageWidth, imageHeight, null);
+            
         }
 
         g.translate(-thumbBounds.x, -thumbBounds.y);
     }
 
     protected void paintTrack(Graphics g, JComponent c, Rectangle trackBounds) {
+    	
         if (this.scrollbar.getOrientation() == 1) {
             g.setColor(BORDER_COLOR);
             g.drawRect(trackBounds.x, trackBounds.y, trackBounds.width - 1,
@@ -226,4 +226,5 @@ public class CScrollBarUI extends BasicScrollBarUI implements MouseListener {
         super.uninstallListeners();
         this.scrollbar.removeMouseListener(this);
     }
+    
 }
