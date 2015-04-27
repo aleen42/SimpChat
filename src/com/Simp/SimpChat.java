@@ -5,6 +5,8 @@ import java.awt.event.*;
 
 import javax.swing.*;
 import javax.swing.border.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import com.java.ui.componentc.JCTextField;
 import com.sun.awt.AWTUtilities;
@@ -16,46 +18,32 @@ public class SimpChat extends JFrame
 	private int point_x, point_y;
 	private boolean isDragging = false;
 	private boolean isUserListShown = false;
+	private DataBase db = new DataBase();
+	JButton Add_Button;
 	
-	
-	private static JLabel Name_Label;
+	private static JLabel error_label;
+ 	private static JLabel Name_Label;
 	private static JLabel IPV4_Label;
+	private static JLabel Status_Label;
+	public static String Status = "null";
 	public static String User_name = "Name";
 	public static String IPV4_adress = "0.0.0.0";
 	public static JPanel Add_user_panel;
 	public static JTextField User_name_textbox;
 	public static JTextField Ip_textbox;
+	public static String User_name_textbox_text_value = "";
+	public static String Ip_textbox_text_value = "";
 //	private TrayIcon trayIcon = null; // Icon
 //	private SystemTray tray = null; // Task Bar
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) 
-	{
-		EventQueue.invokeLater(new Runnable() 
-		{
-			public void run() 
-			{
-				try 
-				{
-					OptimalFont.setUI();					//抗锯齿字体
-					SimpChat frame = new SimpChat();
-					frame.setVisible(true);
-				} 
-				catch (Exception e) 
-				{
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	
 
 	/**
 	 * Create the frame.
 	 */
-	public SimpChat() 
+	public SimpChat(String User_type) 
 	{
+		OptimalFont.setUI();	//抗锯齿字体
 		setUndecorated(true);	 																	//Without Border
 		AWTUtilities.setWindowOpaque(this, false);													//Set Background Opaque to false
 		
@@ -81,28 +69,92 @@ public class SimpChat extends JFrame
 		/* User_name_textbox */
 		User_name_textbox = new JCTextField();
 		User_name_textbox.setFont(new Font("Microsoft JhengHei UI", Font.PLAIN, 15));
-		User_name_textbox.setBounds(102, 38, 382, 24);
+		User_name_textbox.setBounds(101, 23, 382, 24);
+		User_name_textbox.getDocument().addDocumentListener(new DocumentListener(){		//Listen to the input
+        	public void insertUpdate(DocumentEvent e) 
+        	{
+        		error_label.setVisible(Check_name_input(User_name_textbox_text_value = User_name_textbox.getText()));
+        		Add_Button.setEnabled(Check_database());
+            }
+
+            public void removeUpdate(DocumentEvent e) 
+            {
+            	error_label.setVisible(Check_name_input(User_name_textbox_text_value = User_name_textbox.getText()));
+            	Add_Button.setEnabled(Check_database());
+            }
+        	
+        	public void changedUpdate(DocumentEvent e)
+        	{
+        		error_label.setVisible(Check_name_input(User_name_textbox_text_value = User_name_textbox.getText()));
+        		Add_Button.setEnabled(Check_database());
+            }
+        });
 		Add_user_panel.add(User_name_textbox);
 		
 		/* Ip_textbox */
 		Ip_textbox = new JCTextField();
 		Ip_textbox.setFont(new Font("Microsoft JhengHei UI", Font.PLAIN, 15));
-		Ip_textbox.setBounds(102, 80, 382, 24);
+		Ip_textbox.setBounds(100, 57, 382, 24);
+		Ip_textbox.getDocument().addDocumentListener(new DocumentListener(){		//Listen to the input
+        	public void insertUpdate(DocumentEvent e) 
+        	{
+        		error_label.setVisible(Check_IP_input(Ip_textbox_text_value = Ip_textbox.getText()));
+        		Add_Button.setEnabled(Check_database());
+            }
+
+             public void removeUpdate(DocumentEvent e) 
+             {
+            	 error_label.setVisible(Check_IP_input(Ip_textbox_text_value = Ip_textbox.getText()));
+            	 Add_Button.setEnabled(Check_database());
+             }
+        	
+        	public void changedUpdate(DocumentEvent e)
+        	{
+        		error_label.setVisible(Check_IP_input(Ip_textbox_text_value = Ip_textbox.getText()));
+        		Add_Button.setEnabled(Check_database());
+            }
+        });
 		Add_user_panel.add(Ip_textbox);
 		
 		/* lblUsername */
 		JLabel lblUsername = new JLabel("User_name");
 		lblUsername.setForeground(new Color(161, 0, 0));
 		lblUsername.setFont(new Font("Microsoft JhengHei UI", Font.PLAIN, 13));
-		lblUsername.setBounds(20, 40, 82, 22);
+		lblUsername.setBounds(19, 25, 82, 22);
 		Add_user_panel.add(lblUsername);
 
 		/* lblIP */
 		JLabel lblIP = new JLabel("IP");
 		lblIP.setForeground(new Color(161, 0, 0));
 		lblIP.setFont(new Font("Microsoft JhengHei UI", Font.PLAIN, 13));
-		lblIP.setBounds(73, 83, 19, 22);
+		lblIP.setBounds(71, 60, 19, 22);
 		Add_user_panel.add(lblIP);
+		
+		/* ADD_Button */
+		ImageIcon addbutton_static = new ImageIcon("./Pic/addbutton_static.png");
+		ImageIcon addbutton_mouseover = new ImageIcon("./Pic/addbutton_mouseover.png");
+		ImageIcon addbutton_pressed = new ImageIcon("./Pic/addbutton_pressed.png");
+		Add_Button = new Button(addbutton_static, addbutton_mouseover, addbutton_pressed, 1);
+		Add_Button.setOpaque(false);
+		Add_Button.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent arg0) 
+			{
+				
+			}
+		});
+		Add_Button.setBounds(Add_user_panel.getWidth() / 2 - 120 / 2, 136, 120, 30);
+		Add_Button.setEnabled(false);
+		Add_user_panel.add(Add_Button);
+		
+		
+		/* error information */ 
+		error_label = new JLabel("Error: ");
+		error_label.setForeground(new Color(161, 0, 0));
+		error_label.setFont(new Font("Microsoft JhengHei UI", Font.PLAIN, 13));
+		error_label.setBounds(19, 93, 485, 22);
+		error_label.setVisible(false);
+		Add_user_panel.add(error_label);
 		
 		/* User List */
 		
@@ -172,21 +224,39 @@ public class SimpChat extends JFrame
 		Minimize_Button.setBounds(351, 4, 28, 28);
 		contentPane.add(Minimize_Button);
 		
+		/* Title */
+		JLabel Title = new JLabel(User_name);
+		Title.setFont(new Font("Microsoft JhengHei UI", Font.BOLD, 60));
+		Title.setForeground(new Color(161, 0, 0));
+		Title.setBounds(420, 551, 185, 53);
+		Title.setText(User_type);
+		contentPane.add(Title);
+		
 		/* Name Label */
 		Name_Label = new JLabel(User_name);
-		Name_Label.setFont(new Font("Microsoft JhengHei UI", Font.PLAIN, 33));
+		Name_Label.setFont(new Font("Microsoft JhengHei UI", Font.BOLD, 33));
 		Name_Label.setForeground(new Color(161, 0, 0));
 		Name_Label.setBounds(48, 32, 185, 53);
 		Name_Label.setVisible(false);
 		contentPane.add(Name_Label);
 		
 		/* IPV4 Label */
-		IPV4_Label = new JLabel(User_name);
-		IPV4_Label.setFont(new Font("Microsoft JhengHei UI", Font.PLAIN, 17));
+		IPV4_Label = new JLabel(IPV4_adress);
+		IPV4_Label.setFont(new Font("Microsoft JhengHei UI", Font.BOLD, 17));
 		IPV4_Label.setForeground(Color.BLACK);
-		IPV4_Label.setBounds(48, 90, 230, 46);
+		IPV4_Label.setBounds(48, 108, 230, 46);
 		IPV4_Label.setVisible(false);
 		contentPane.add(IPV4_Label);
+		
+		/* Status Label */
+		Status_Label = new JLabel(Status);
+		Status_Label.setFont(new Font("Microsoft JhengHei UI", Font.BOLD, 14));
+		Status_Label.setForeground(Color.BLACK);
+		Status_Label.setBounds(48, 65, 230, 46);
+		Status_Label.setVisible(false);
+		contentPane.add(Status_Label);
+		
+		
 		
 		/* Drag Handler */
 		this.addMouseListener(new MouseAdapter() 
@@ -202,6 +272,8 @@ public class SimpChat extends JFrame
 			    isDragging = false;
 			}
 		});
+		
+				
 		
 		this.addMouseMotionListener(new MouseMotionAdapter()
 		{
@@ -234,6 +306,12 @@ public class SimpChat extends JFrame
 		Name_Label.setText(User_name);
 	}
 	
+	public static void update_Status_Label(boolean visible)
+	{
+		Status_Label.setVisible(visible);
+		Status_Label.setText("(" + Status + ")");
+	}
+	
 	public static void update_IPV4_Label(boolean visible)
 	{
 		IPV4_Label.setVisible(visible);
@@ -249,5 +327,53 @@ public class SimpChat extends JFrame
 		userlist_window.setVisible(!isthere);
 		isUserListShown = !isthere;
 		
+	}
+	
+	private boolean Check_name_input(String input)
+	{
+		String regex = "[a-zA-Z]+[a-zA-Z0-9]*";
+		if(User_name_textbox_text_value.isEmpty())
+		{
+			error_label.setText("Error: The username can not be empty!");
+			return true;
+		}	
+		else if(!input.matches(regex))
+		{
+			error_label.setText("Error: You can only use alphabets or numbers with alphabets first");
+			return true;
+		}
+		return false;
+	}
+	
+	private boolean Check_IP_input(String input)
+	{
+		// 定义正则表达式
+		/* Check IP */
+        String regex = "^(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|[1-9])\\."
+                + "(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\."
+                + "(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\."
+                + "(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)$";
+        if(!input.matches(regex))
+        {
+        	error_label.setText("Error: The IP address is illegal!");
+        	return true;
+        }			
+        return false;
+	}
+	
+	private boolean Check_database()
+	{	
+		if(error_label.isVisible() == true || User_name_textbox_text_value.length() == 0 || Ip_textbox_text_value.length() == 0)
+			return false;
+        
+        /* Check isExisted */
+        if(db.Check_isExisted())
+        {
+        	error_label.setText("Error: The user has been existed!");
+        	error_label.setVisible(true);
+        	return false;
+        }
+        error_label.setVisible(false);
+        return true;	
 	}
 }

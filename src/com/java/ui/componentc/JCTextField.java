@@ -22,7 +22,7 @@ public class JCTextField extends JTextField {
 
     private static final long serialVersionUID = -2877157868704955530L;
     
-    private String text_value;
+    
     private BufferedImage buffer = null; 
     private float alpha;
     private boolean borderChange;
@@ -98,22 +98,6 @@ public class JCTextField extends JTextField {
         	}
         });
         
-        getDocument().addDocumentListener(new DocumentListener(){
-        	public void insertUpdate(DocumentEvent e) 
-        	{
-        		JCTextField.this.text_value = getText();
-            }
-
-             public void removeUpdate(DocumentEvent e) 
-             {
-            	 JCTextField.this.text_value = getText();
-             }
-        	
-        	public void changedUpdate(DocumentEvent e)
-        	{
-        		JCTextField.this.text_value = getText();
-            }
-        });
     }
     
     @Override 
@@ -146,10 +130,6 @@ public class JCTextField extends JTextField {
         }          
     }  
     
-    public String getvalue()
-    {
-    	return this.text_value;
-    }
 
     public JCTextField(int columns) {
         this(null, null, columns);

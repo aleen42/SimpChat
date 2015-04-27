@@ -1,6 +1,5 @@
 package com.java.ui.componentc;
 
-import com.Simp.SimpChat;
 import com.java.ui.util.UIResourceManager;
 import com.java.ui.util.UIUtil;
 

@@ -71,6 +71,29 @@ public class DataBase {
 		return reserve;
 	}
 	
+	public boolean Check_isExisted()
+	{
+		boolean reserve = false;
+		try 
+		{
+			SQL = "select count(*) from Chat.dbo.Listen_User_Table where User_name = '" + SimpChat.User_name_textbox_text_value + "' and Ipv4_Adress = '" + SimpChat.Ip_textbox_text_value + "';";
+	        stmt = con.createStatement();    
+	        res = stmt.executeQuery(SQL);  
+			// Iterate through the data in the result set and display it.    
+	        res.next();														//next row
+	        int count = res.getInt(1);
+	        reserve = (count == 1) ? true : false;
+//	        System.out.println(reserve);
+	        stmt.close();
+		}
+		// Handle any errors that may have occurred.    
+	    catch (Exception e) 
+		{    
+	        e.printStackTrace();    
+	    }
+		return reserve;
+	}
+	
 	public String get_ipv4(int index)							//get User_list
 	{
 		String reserve = "0.0.0.0";

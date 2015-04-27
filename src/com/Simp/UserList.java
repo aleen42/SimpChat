@@ -64,6 +64,7 @@ public class UserList extends JPanel {
 			}
 		});
 		Useradd_Button.setBounds(128, 361, 25, 29);
+		Useradd_Button.setVisible(false);
 		add(Useradd_Button);
 		
 		/* UserDelete Button */
@@ -80,12 +81,13 @@ public class UserList extends JPanel {
 					return;
 				db.delet_User(index - empty_size + 1);
 				listItem.remove(index);							//delete selected user
-				/* hide labe */
+				/* hide label */
 				SimpChat.update_UserName_Label(false);	
 				SimpChat.update_IPV4_Label(false);
 				index = 0;
 			}
 		});
+		Userdelete_Button.setVisible(false);
 		Userdelete_Button.setBounds(165, 361, 25, 29);
 		add(Userdelete_Button);
         
@@ -135,12 +137,14 @@ public class UserList extends JPanel {
         		{
         			SimpChat.update_UserName_Label(false);
         			SimpChat.update_IPV4_Label(false);
+        			SimpChat.update_Status_Label(false);
         			return;
         		}	
         		SimpChat.update_UserName_Label(true);
         		SimpChat.IPV4_adress = db.get_ipv4(index - empty_size + 1);
         		SimpChat.update_IPV4_Label(true);
-        		
+        		SimpChat.Status = db.get_status(index - empty_size + 1);
+        		SimpChat.update_Status_Label(true);
         	}
         	
 		});
