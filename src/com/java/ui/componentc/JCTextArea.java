@@ -49,6 +49,7 @@ public class JCTextArea extends JTextArea {
         setDisabledTextColor(new Color(123, 123, 122));
         setCursor(new Cursor(2));
         setMargin(new Insets(0, 0, 0, 0));
+        setEditable(false);
         super.setBorder(this.normalBorder = new ImageBorder(UIResourceManager.getImageByName("border_normal.png"), 5, 6, 3, 4));
         this.extender = new TextExtender(this);
         this.rolloverBorder = UIResourceManager.getBorder("TextRolloverBorder");
@@ -59,15 +60,15 @@ public class JCTextArea extends JTextArea {
         this.visibleInsets = new Insets(1, 1, 1, 1);
         this.borderChange = true;
         this.leadingTextVisible = true;
-        this.listener = new MouseAdapter() {
-            public void mouseEntered(MouseEvent e) {
-                JCTextArea.this.mouseIn();
-            }
-
-            public void mouseExited(MouseEvent e) {
-                JCTextArea.this.mouseOut();
-            }
-        };
+//        this.listener = new MouseAdapter() {
+//            public void mouseEntered(MouseEvent e) {
+//                JCTextArea.this.mouseIn();
+//            }
+//
+//            public void mouseExited(MouseEvent e) {
+//                JCTextArea.this.mouseOut();
+//            }
+//        };
         addMouseListener(this.listener);
     }
 
@@ -145,22 +146,21 @@ public class JCTextArea extends JTextArea {
 
     public void setEditable(boolean editable) {
         super.setEditable(editable);
-
-        if (this.borderChange) {
-            mouseOut();
-        }
+//        if (this.borderChange) {
+//            mouseOut();
+//        }
     }
 
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
 
-        if (this.borderChange) {
-            if (enabled) {
-                mouseOut();
-            } else if (this.normalBorder != null) {
-                super.setBorder(this.disabledBorder);
-            }
-        }
+//        if (this.borderChange) {
+//            if (enabled) {
+//                mouseOut();
+//            } else if (this.normalBorder != null) {
+//                super.setBorder(this.disabledBorder);
+//            }
+//        }
     }
 
     public void setImage(Image image) {

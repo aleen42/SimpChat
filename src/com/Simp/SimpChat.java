@@ -62,13 +62,13 @@ public class SimpChat extends JFrame
 		/* Add_User_Panel */
         Image adduserPanel_bg = this.getToolkit().getImage("./Pic/AddUserPanel_bg.png");
 		Add_user_panel = new UIPanel(adduserPanel_bg);
-		Add_user_panel.setBounds(525, 498, 514, 192);
+		Add_user_panel.setBounds(525, 418, 514, 192);
 		Add_user_panel.setVisible(false);
 		getContentPane().add(Add_user_panel);
 		
 		/* User_name_textbox */
 		User_name_textbox = new JCTextField();
-		User_name_textbox.setFont(new Font("Microsoft JhengHei UI", Font.PLAIN, 15));
+		User_name_textbox.setFont(new Font("Microsoft JhengHei UI", Font.PLAIN, 13));
 		User_name_textbox.setBounds(101, 23, 382, 24);
 		User_name_textbox.getDocument().addDocumentListener(new DocumentListener(){		//Listen to the input
         	public void insertUpdate(DocumentEvent e) 
@@ -93,7 +93,7 @@ public class SimpChat extends JFrame
 		
 		/* Ip_textbox */
 		Ip_textbox = new JCTextField();
-		Ip_textbox.setFont(new Font("Microsoft JhengHei UI", Font.PLAIN, 15));
+		Ip_textbox.setFont(new Font("Microsoft JhengHei UI", Font.PLAIN, 13));
 		Ip_textbox.setBounds(100, 57, 382, 24);
 		Ip_textbox.getDocument().addDocumentListener(new DocumentListener(){		//Listen to the input
         	public void insertUpdate(DocumentEvent e) 
@@ -161,7 +161,7 @@ public class SimpChat extends JFrame
 			/* JPanel */
 		Image userlist_bg = this.getToolkit().getImage("./Pic/userlist_bg.png");
 		JPanel userlist = new UserList(userlist_bg);
-		userlist.setBounds((int)(scrSize.width * 0.3) - 4, ((int)(scrSize.height * 0.8) - 400) / 2, 200, 400);
+		userlist.setBounds((int)(scrSize.width * 0.3) - 4, 30, 200, 400);
 		contentPane.add(userlist);
 		
 			/* Button */
@@ -178,7 +178,7 @@ public class SimpChat extends JFrame
 //				setVisible(true);	//set the Z order of JFrames
 			}
 		});
-		UserList_Button.setBounds(379, getHeight() / 2 - 84 / 2, 28, 84);
+		UserList_Button.setBounds(379, 50, 28, 84);
 		contentPane.add(UserList_Button);		
 		
 		/* Close Button */
@@ -234,7 +234,7 @@ public class SimpChat extends JFrame
 		
 		/* Name Label */
 		Name_Label = new JLabel(User_name);
-		Name_Label.setFont(new Font("Microsoft JhengHei UI", Font.BOLD, 33));
+		Name_Label.setFont(new Font("Microsoft JhengHei UI", Font.BOLD, 40));
 		Name_Label.setForeground(new Color(161, 0, 0));
 		Name_Label.setBounds(48, 32, 185, 53);
 		Name_Label.setVisible(false);
@@ -242,7 +242,7 @@ public class SimpChat extends JFrame
 		
 		/* IPV4 Label */
 		IPV4_Label = new JLabel(IPV4_adress);
-		IPV4_Label.setFont(new Font("Microsoft JhengHei UI", Font.BOLD, 17));
+		IPV4_Label.setFont(new Font("Microsoft JhengHei UI", Font.PLAIN, 17));
 		IPV4_Label.setForeground(Color.BLACK);
 		IPV4_Label.setBounds(48, 108, 230, 46);
 		IPV4_Label.setVisible(false);
@@ -250,7 +250,7 @@ public class SimpChat extends JFrame
 		
 		/* Status Label */
 		Status_Label = new JLabel(Status);
-		Status_Label.setFont(new Font("Microsoft JhengHei UI", Font.BOLD, 14));
+		Status_Label.setFont(new Font("Microsoft JhengHei UI", Font.PLAIN, 14));
 		Status_Label.setForeground(Color.BLACK);
 		Status_Label.setBounds(48, 65, 230, 46);
 		Status_Label.setVisible(false);
@@ -363,8 +363,11 @@ public class SimpChat extends JFrame
 	
 	private boolean Check_database()
 	{	
-		if(error_label.isVisible() == true || User_name_textbox_text_value.length() == 0 || Ip_textbox_text_value.length() == 0)
+		if(Check_IP_input(Ip_textbox_text_value) || Check_name_input(User_name_textbox_text_value) || User_name_textbox_text_value.length() == 0 || Ip_textbox_text_value.length() == 0)
+		{
+			error_label.setVisible(true);
 			return false;
+		}
         
         /* Check isExisted */
         if(db.Check_isExisted())

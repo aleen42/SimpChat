@@ -17,8 +17,8 @@ import java.lang.reflect.Method;
 public class CTextAreaUI extends BasicTextAreaUI {
     private static final Color DISABLED_BG = UIResourceManager.getColor("TextDisabledBackground");
 
-    private static final Color NON_EDITABLE_BG = UIResourceManager.getColor("TextNonEditableBackground");
-
+//    private static final Color NON_EDITABLE_BG = UIResourceManager.getColor("TextNonEditableBackground");
+    private static final Color NON_EDITABLE_BG = Color.WHITE;
     public static ComponentUI createUI(JComponent c) {
         return new CTextAreaUI();
     }

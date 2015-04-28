@@ -55,7 +55,7 @@ public class JCTextField extends JTextField {
         setSelectionColor(new Color(49, 106, 197));
         setSelectedTextColor(UIResourceManager.getWhiteColor());
         setDisabledTextColor(new Color(123, 123, 122));
-        setCursor(new Cursor(2));
+//        setCursor(new Cursor(2));
         setMargin(new Insets(0, 0, 0, 0));
         super.setBorder(this.normalBorder = new ImageBorder(UIResourceManager.getImageByName("border_normal.png"), 5, 6, 3, 4));
         this.extender = new TextExtender(this);
@@ -218,9 +218,9 @@ public class JCTextField extends JTextField {
     public void setEditable(boolean editable) {
         super.setEditable(editable);
 
-        if (this.borderChange) {
-            mouseOut();
-        }
+//        if (this.borderChange) {
+//            mouseOut();
+//        }
     }
 
     public void setEnabled(boolean enabled) {
