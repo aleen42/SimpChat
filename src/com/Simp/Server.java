@@ -37,7 +37,7 @@ public class Server extends SimpChat{
 	private String send_textbox_text_value = "";
 	private boolean isStarted = false;
 	
-	private SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");	//set time format
+	private static SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");	//set time format
 	public static JTextArea Content;
 	private ServerSocket serverSocket;
 	private ServerThread serverThread;
@@ -415,7 +415,7 @@ public class Server extends SimpChat{
 		}	
 	}
 	
-	public void sendText(String string)
+	public static void sendText(String string)
 	{
 		Content.append( df.format(new Date()) + "\t" + string + "\n");
 	}

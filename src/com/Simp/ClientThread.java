@@ -67,6 +67,7 @@ public class ClientThread extends Thread {
 		}
 	}
 	
+	@SuppressWarnings("deprecation")
 	public void run()
 	{
 		String message = null;
@@ -75,11 +76,48 @@ public class ClientThread extends Thread {
 			try 
 			{
 				message = readfromclient.readLine();
-				
+				if(message.equals("CLOSE"))
+				{
+					Server.sendText(User_name + "/" + IP + " is offline!");			
+					/* Release Sources */
+					readfromclient.close();
+					writetoclient.close();
+					socket.close();
+					for(int i = Server.Clients.size() - 1; i >= 0; i--) 
+					{											
+						Server.Clients.get(i).getWriter().println(User_name + "/" + IP + " is offline!");			//Reply offline information to other clients
+						Server.Clients.get(i).getWriter().flush();
+					}
+					
+					/* delete the thread */
+					for(int i = Server.Clients.size() - 1; i >= 0; i--) 
+					{											
+						if(Server.Clients.get(i).getUser() == User_name)
+						{
+							ClientThread temp = Server.Clients.get(i);
+							Server.Clients.remove(i);
+							temp.stop();
+							return;
+						}
+					}
+					
+				}
+				else
+				{
+					for(int i = Server.Clients.size() - 1; i >= 0; i--) 
+					{											
+						Server.Clients.get(i).getWriter().println(User_name + "/" + IP + " said:\t" + message);			//Reply offline information to other clients
+						Server.Clients.get(i).getWriter().flush();
+					}
+				}
 			} 
 			catch (IOException e) 
 			{
 				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			catch (SecurityException e)
+			{
 				e.printStackTrace();
 			}
 		}
