@@ -31,10 +31,10 @@ public class ServerThread extends Thread{
 					continue;
 				}
 				ClientThread client = new ClientThread(socket);
-				client.run();
 				Server.Clients.add(client);
+				client.run();
 				//update list
-				Server.Content.append(client.getUser() + "/" + client.getIP() + "\t" + "Connect Successfully!");
+				Server.sendText(client.getUser() + "/" + client.getIP() + " Connect Successfully!");
 			} 
 			catch (IOException e) 
 			{

@@ -21,6 +21,7 @@ public class SimpChat extends JFrame
 	private DataBase db = new DataBase();
 	JButton Add_Button;
 	
+	public JButton Close_Button;
 	private static JLabel error_label;
  	private static JLabel Name_Label;
 	private static JLabel IPV4_Label;
@@ -186,15 +187,9 @@ public class SimpChat extends JFrame
 		ImageIcon close_button_mouseover = new ImageIcon("./Pic/closebutton_mouseover.png");
 		ImageIcon close_button_pressed = new ImageIcon("./Pic/closebutton_pressed.png");
 		
-		JButton Close_Button = new Button(close_button_bg, close_button_mouseover, close_button_pressed, 0);
+		Close_Button = new Button(close_button_bg, close_button_mouseover, close_button_pressed, 0);
 		Close_Button.setOpaque(false);
-		Close_Button.addActionListener(new ActionListener() 
-		{
-			public void actionPerformed(ActionEvent arg0) 
-			{
-				System.exit(0);
-			}
-		});
+		
 		Close_Button.setBounds(379, 4, 28, 28);
 		contentPane.add(Close_Button);
 		

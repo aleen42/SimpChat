@@ -37,7 +37,7 @@ public class Server extends SimpChat{
 	private String send_textbox_text_value = "";
 	private boolean isStarted = false;
 	
-	private static SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");	//set time format
+	public static SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");	//set time format
 	public static JTextArea Content;
 	private ServerSocket serverSocket;
 	private ServerThread serverThread;
@@ -68,7 +68,17 @@ public class Server extends SimpChat{
 	Server(String User_type) 
 	{
 		super(User_type);
-		
+		super.Close_Button.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent arg0) 
+			{
+				if(isStarted == true)
+				{
+					serverClose();
+				}
+				System.exit(0);
+			}
+		});
 		/* error information */ 
 		error_Label = new JLabel("Error: ");
 		error_Label.setForeground(new Color(161, 0, 0));
@@ -231,11 +241,11 @@ public class Server extends SimpChat{
 //		Content.setEditable(false);
 //		Content.setFocusable(false);
 //		Content.setBorder(null);
-		Content.setBounds(14, 153, 382, 303);
 		Content.setFont(new Font("Microsoft JhengHei UI", Font.PLAIN, 12));
-		getContentPane().add(Content);
-//		ScrollBox scroll_Content = new ScrollBox(list);
-//		getContentPane().add(scroll_Content);
+//		getContentPane().add(Content);
+		ScrollBox scroll_Content = new ScrollBox(Content);
+		scroll_Content.setBounds(14, 153, 382, 303);
+		getContentPane().add(scroll_Content);
 		
 		/* input_box */
 		input_box = new JCTextField();
@@ -246,18 +256,24 @@ public class Server extends SimpChat{
         	public void insertUpdate(DocumentEvent e) 
         	{
         		send_textbox_text_value = input_box.getText();
+        		if(isStarted == false)
+        			return;
         		Send_Button.setEnabled(Check_send());
             }
 
             public void removeUpdate(DocumentEvent e) 
             {
             	send_textbox_text_value = input_box.getText();
+            	if(isStarted == false)
+        			return;
             	Send_Button.setEnabled(Check_send());
             }
         	
         	public void changedUpdate(DocumentEvent e)
         	{
         		send_textbox_text_value = input_box.getText();
+        		if(isStarted == false)
+        			return;
         		Send_Button.setEnabled(Check_send());
             }
         });	

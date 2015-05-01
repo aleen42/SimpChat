@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Date;
 
 //a thread used to serve the client
 public class ClientThread extends Thread {
@@ -46,17 +47,18 @@ public class ClientThread extends Thread {
 			readfromclient = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			User_name = readfromclient.readLine();
 			IP = readfromclient.readLine();
+//			System.out.println(User_name + "\n" + IP);
 			writetoclient = new PrintWriter(socket.getOutputStream());
-			writetoclient.println(User_name + "/" + IP + "\t" + "Connect Successfully!");					//Reply connect successfully
+			writetoclient.println(Server.df.format(new Date()) + "\t" + User_name + "/" + IP + "\t" + "Connect Successfully!\n");					//Reply connect successfully
 			writetoclient.flush();
-			
+//			System.out.println(Server.Clients.size());
 			if (Server.Clients.size() > 0) {
-				writetoclient.println("There are "+ (Server.Clients.size() - 1) +" online users.");			//Reply a number of online users
+				writetoclient.println(Server.df.format(new Date()) + "\t" + "There are "+ (Server.Clients.size() - 1) +" online users.\n");			//Reply a number of online users
 				writetoclient.flush();
 			}
 			
 			for (int i = Server.Clients.size() - 1; i >= 0; i--) {											
-				Server.Clients.get(i).getWriter().println(User_name + "/" + IP + " is online!");			//Reply online information to other clients
+				Server.Clients.get(i).getWriter().println(Server.df.format(new Date()) + "\t" + User_name + "/" + IP + " is online!\n");			//Reply online information to other clients
 				Server.Clients.get(i).getWriter().flush();
 			}
 		} 
@@ -70,12 +72,11 @@ public class ClientThread extends Thread {
 	@SuppressWarnings("deprecation")
 	public void run()
 	{
-		String message = null;
+		String message = "";
 		while (true) 																						//always listen to the client message
 		{
 			try 
 			{
-				message = readfromclient.readLine();
 				if(message.equals("CLOSE"))
 				{
 					Server.sendText(User_name + "/" + IP + " is offline!");			
@@ -85,7 +86,7 @@ public class ClientThread extends Thread {
 					socket.close();
 					for(int i = Server.Clients.size() - 1; i >= 0; i--) 
 					{											
-						Server.Clients.get(i).getWriter().println(User_name + "/" + IP + " is offline!");			//Reply offline information to other clients
+						Server.Clients.get(i).getWriter().println(Server.df.format(new Date()) + "\t" + User_name + "/" + IP + " is offline!\n");			//Reply offline information to other clients
 						Server.Clients.get(i).getWriter().flush();
 					}
 					
@@ -104,12 +105,13 @@ public class ClientThread extends Thread {
 				}
 				else
 				{
+					/* public sent */
 					for(int i = Server.Clients.size() - 1; i >= 0; i--) 
 					{											
-						Server.Clients.get(i).getWriter().println(User_name + "/" + IP + " said:\t" + message);			//Reply offline information to other clients
+						Server.Clients.get(i).getWriter().println(Server.df.format(new Date()) + "\t" + User_name + "/" + IP + " said:\t" + message + "\n");			//Reply offline information to other clients
 						Server.Clients.get(i).getWriter().flush();
 					}
-				}
+				}		
 			} 
 			catch (IOException e) 
 			{
