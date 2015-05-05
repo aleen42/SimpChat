@@ -18,7 +18,7 @@ public class DataBase {
 	        Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");    
 //	        System.out.println("Connecting"); 
 	        con = DriverManager.getConnection(url);    
-	        System.out.println("Connection Successful!"); 
+//	        System.out.println("Connection Successful!"); 
 		}
 
 	    // Handle any errors that may have occurred.    
@@ -32,7 +32,7 @@ public class DataBase {
 		try 
 		{
 			// Create and execute an SQL statement that returns some data.    
-			SQL = "select User_name,Ipv4_Adress,case User_status when 0 then 'offline' when 1 then 'online' end as User_status from dbo.Listen_User_Table";
+			SQL = "select User_name,Ipv4_Adress,case User_status when 0 then 'offline' when 1 then 'online' end as User_status from dbo.Listen_User_Table where User_status = 1;";
 	        stmt = con.createStatement();    
 	        res = stmt.executeQuery(SQL);  
 			// Iterate through the data in the result set and display it.    
@@ -71,12 +71,94 @@ public class DataBase {
 		return reserve;
 	}
 	
-	public boolean Check_isExisted()
+	public boolean Check_isOnline(String username, String ip)
 	{
 		boolean reserve = false;
 		try 
 		{
-			SQL = "select count(*) from Chat.dbo.Listen_User_Table where User_name = '" + SimpChat.User_name_textbox_text_value + "' and Ipv4_Adress = '" + SimpChat.Ip_textbox_text_value + "';";
+        	SQL = "select case User_status when 0 then 'offline' when 1 then 'online' end as User_status from Chat.dbo.Listen_User_Table where User_name = '" + username + "' and Ipv4_Adress = '" + ip + "';";
+        	stmt = con.createStatement();    
+	        res = stmt.executeQuery(SQL); 
+        	res.next();														//next row
+            if(res.getString("User_status").equals("online"))
+            	reserve = true;
+            stmt.close();
+		}
+		// Handle any errors that may have occurred.    
+	    catch (Exception e) 
+		{    
+	        e.printStackTrace();    
+	    }
+		return reserve;
+	}
+	
+	public void Update_status(String username, String ip, String status)
+	{
+		int s = 0;
+		if(status.equals("offline"))
+			s = 0;
+		else if(status.equals("online"))
+			s = 1;
+		
+		try 
+		{
+        	SQL = "update Chat.dbo.Listen_User_Table set User_Status = " + s + " where User_name = '" + username + "' and Ipv4_Adress = '" + ip + "';";
+        	 
+        	boolean autocommit = con.getAutoCommit();
+        	con.setAutoCommit(false);
+        	stmt = con.createStatement();
+        	if(stmt.executeUpdate(SQL) == 1)
+        	{
+        		con.commit();
+        	}
+        	else
+        	{
+        		System.out.println("Update Status Failed!\n");
+        		con.rollback();
+        	} 	
+        	con.setAutoCommit(autocommit);
+
+		}
+		// Handle any errors that may have occurred.    
+	    catch (Exception e) 
+		{    
+	        e.printStackTrace();    
+	    }
+	}
+	
+	public void Insert_User(String username, String ip)
+	{
+		try 
+		{
+        	SQL = "insert into Chat.dbo.Listen_User_Table select '" + ip + "','" + username + "',0;";
+        	boolean autocommit = con.getAutoCommit();
+        	con.setAutoCommit(false);
+        	stmt = con.createStatement();
+        	if(stmt.executeUpdate(SQL) == 1)
+        	{
+        		con.commit();
+        	}
+        	else
+        	{
+        		System.out.println("Sign Up Failed!\n");
+        		con.rollback();
+        	} 	
+        	con.setAutoCommit(autocommit);
+
+		}
+		// Handle any errors that may have occurred.    
+	    catch (Exception e) 
+		{    
+	        e.printStackTrace();    
+	    }
+	}
+	
+	public boolean Check_isExisted(String username, String ip)
+	{
+		boolean reserve = false;
+		try 
+		{
+			SQL = "select count(*) from Chat.dbo.Listen_User_Table where User_name = '" + username + "' and Ipv4_Adress = '" + ip + "';";
 	        stmt = con.createStatement();    
 	        res = stmt.executeQuery(SQL);  
 			// Iterate through the data in the result set and display it.    

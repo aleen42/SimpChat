@@ -22,6 +22,7 @@ public class SimpChat extends JFrame
 	JButton Add_Button;
 	
 	public JButton Close_Button;
+	public UserList userlist;
 	private static JLabel error_label;
  	private static JLabel Name_Label;
 	private static JLabel IPV4_Label;
@@ -34,6 +35,7 @@ public class SimpChat extends JFrame
 	public static JTextField Ip_textbox;
 	public static String User_name_textbox_text_value = "";
 	public static String Ip_textbox_text_value = "";
+	
 //	private TrayIcon trayIcon = null; // Icon
 //	private SystemTray tray = null; // Task Bar
 
@@ -161,7 +163,7 @@ public class SimpChat extends JFrame
 		
 			/* JPanel */
 		Image userlist_bg = this.getToolkit().getImage("./Pic/userlist_bg.png");
-		JPanel userlist = new UserList(userlist_bg);
+		userlist = new UserList(userlist_bg);
 		userlist.setBounds((int)(scrSize.width * 0.3) - 4, 30, 200, 400);
 		contentPane.add(userlist);
 		
@@ -365,7 +367,7 @@ public class SimpChat extends JFrame
 		}
         
         /* Check isExisted */
-        if(db.Check_isExisted())
+        if(db.Check_isExisted(User_name_textbox_text_value, Ip_textbox_text_value))
         {
         	error_label.setText("Error: The user has been existed!");
         	error_label.setVisible(true);

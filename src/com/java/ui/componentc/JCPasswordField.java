@@ -6,7 +6,10 @@ import com.java.ui.util.UIUtil;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.text.Document;
+
 import java.awt.*;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -24,6 +27,8 @@ public class JCPasswordField extends JPasswordField {
     private Border normalBorder;
     private Border rolloverBorder;
     private Insets visibleInsets;
+    private Border focusBorder;
+    private boolean isFocused;
 
     public JCPasswordField() {
         this(null, null, 0);
@@ -56,6 +61,8 @@ public class JCPasswordField extends JPasswordField {
         this.alpha = 1.0F;
         this.visibleInsets = new Insets(1, 1, 1, 1);
         this.borderChange = true;
+        this.focusBorder = new ImageBorder(getToolkit().getImage("./Pic/border_focus.png"), 5, 6, 3, 4);
+        
         this.listener = new MouseAdapter() {
             public void mouseEntered(MouseEvent e) {
                 JCPasswordField.this.mouseIn();
@@ -66,6 +73,33 @@ public class JCPasswordField extends JPasswordField {
             }
         };
         addMouseListener(this.listener);
+        
+        addFocusListener(new FocusAdapter()
+        {
+        	public void focusGained(FocusEvent e)
+        	{
+        		isFocused = true;
+        		JCPasswordField.this.gotfocus();
+        	}
+        	
+        	public void focusLost(FocusEvent e)
+        	{
+        		isFocused = false;
+        		JCPasswordField.this.lostfocus();
+        	}
+        });
+    }
+    
+    private void gotfocus() {
+        if ((this.normalBorder != null) && (isEnabled())) {
+            super.setBorder(this.focusBorder);
+        }
+    }
+    
+    private void lostfocus() {
+        if ((this.normalBorder != null) && (isEnabled())) {
+        	super.setBorder(isEditable() ? this.normalBorder : this.nonEditableBorder);
+        }
     }
 
     public JCPasswordField(int columns) {
@@ -102,16 +136,14 @@ public class JCPasswordField extends JPasswordField {
     }
 
     private void mouseIn() {
-        if ((this.normalBorder != null) && (isEnabled())) {
-            super.setBorder(isEditable() ? this.rolloverBorder
-                    : this.nonEditableRolloverBorder);
+        if ((this.normalBorder != null) && (isEnabled() && !isFocused)) {
+            super.setBorder(isEditable() ? this.rolloverBorder : this.nonEditableRolloverBorder);
         }
     }
 
     private void mouseOut() {
-        if ((this.normalBorder != null) && (isEnabled())) {
-            super.setBorder(isEditable() ? this.normalBorder
-                    : this.nonEditableBorder);
+        if ((this.normalBorder != null) && (isEnabled()) && !isFocused) {
+            super.setBorder(isEditable() ? this.normalBorder : this.nonEditableBorder);
         }
     }
 

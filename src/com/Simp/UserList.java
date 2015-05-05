@@ -159,9 +159,9 @@ public class UserList extends JPanel {
     } 
 	
 	
-	protected void UpdateList()
+	public void UpdateList()
 	{
-		
+		listItem.clear();
 		for(int i = 1; i <= empty_size; i++)
 	    {
 			listItem.addElement(" ");

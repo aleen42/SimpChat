@@ -57,6 +57,22 @@ public class ScrollBox extends JScrollPane {
 //        getViewport().setOpaque(false);
 	}
 	
+	ScrollBox(JTextArea content)
+	{
+		super(content, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		super.setBorder(new CompoundBorder(this.outsideBorder = super.getBorder(), this.insideBorder = new EmptyBorder(1, 1, 1, 1)));											//Clear Border
+		super.setOpaque(false);
+//		setBackground(Color.RED);
+        setForeground(Color.WHITE);
+        setFont(UIUtil.getDefaultFont());
+        createVerticalScrollBar();
+        createHorizontalScrollBar();
+        createViewport();
+        this.visibleInsets = new Insets(1, 1, 1, 1);				//without border
+        setBorder(null);
+//        getViewport().setOpaque(false);
+	}
+	
 	public JScrollBar createVerticalScrollBar() 
 	{
         return new ScrollBox_ScrollBar(1);

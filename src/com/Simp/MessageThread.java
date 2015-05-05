@@ -22,9 +22,14 @@ public class MessageThread extends Thread
 		String message = null;
 		while(true)
 		{
+			
 			try {
 				message = readefromserver.readLine();
-				Content.append(message);
+				if(message != null)
+				{
+					System.out.println(message);
+					Content.append(message + "\n");
+				}
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

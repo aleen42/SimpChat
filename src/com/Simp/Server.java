@@ -14,6 +14,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -37,6 +38,7 @@ public class Server extends SimpChat{
 	private String send_textbox_text_value = "";
 	private boolean isStarted = false;
 	
+	public static UserList userlist;
 	public static SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");	//set time format
 	public static JTextArea Content;
 	private ServerSocket serverSocket;
@@ -79,6 +81,9 @@ public class Server extends SimpChat{
 				System.exit(0);
 			}
 		});
+		
+		this.userlist = super.userlist;
+		
 		/* error information */ 
 		error_Label = new JLabel("Error: ");
 		error_Label.setForeground(new Color(161, 0, 0));
@@ -240,7 +245,7 @@ public class Server extends SimpChat{
 //		Content.setBackground(Color.BLACK);
 //		Content.setEditable(false);
 //		Content.setFocusable(false);
-//		Content.setBorder(null);
+		Content.setBorder(null);
 		Content.setFont(new Font("Microsoft JhengHei UI", Font.PLAIN, 12));
 //		getContentPane().add(Content);
 		ScrollBox scroll_Content = new ScrollBox(Content);
@@ -252,6 +257,15 @@ public class Server extends SimpChat{
 		input_box.setVisible(true);
 		input_box.setFont(new Font("Microsoft JhengHei UI", Font.PLAIN, 13));
 		input_box.setBounds(14, 464, 280, 24);
+		input_box.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				sendText(send_textbox_text_value);
+				serverThread.send_message(send_textbox_text_value);
+				input_box.setText("");														//clear input_box
+				input_box.requestFocus();
+			}
+		});
+		
 		input_box.getDocument().addDocumentListener(new DocumentListener(){		//Listen to the input
         	public void insertUpdate(DocumentEvent e) 
         	{
@@ -290,6 +304,7 @@ public class Server extends SimpChat{
 			public void actionPerformed(ActionEvent arg0) 
 			{
 				sendText(send_textbox_text_value);
+				serverThread.send_message(send_textbox_text_value);
 				input_box.setText("");														//clear input_box
 				input_box.requestFocus();
 			}
@@ -333,12 +348,12 @@ public class Server extends SimpChat{
 		}
 		if(input.substring(0, 1).compareTo("-") == 0)
 		{
-			System.out.println("1");
+//			System.out.println("1");
 			error_Label.setText("Error: The port can not be minus!");
 			return true;
 		}
 		if(input.indexOf(".") > 0)
-		{
+		{	
 			error_Label.setText("Error: The port should be an integer!");
 			return true;
 		}
@@ -406,7 +421,7 @@ public class Server extends SimpChat{
 			for (int i = Clients.size() - 1; i >= 0; i--) 
 			{
 				
-				Clients.get(i).getWriter().println("CLOSE");							//send stop information to the client
+				Clients.get(i).getWriter().println(df.format(new Date()) + "\t" + "The server has been close!");							//send stop information to the client
 				Clients.get(i).getWriter().flush();
 				
 				/* Released Sources */

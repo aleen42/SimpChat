@@ -32,25 +32,25 @@ public class Client extends SimpChat{
 	
 	private JTextField input_box;
 	private JTextField ip_textbox;
-	private static JCTextField port_textbox;
+	public static JCTextField port_textbox;
 	private JLabel error_Label;
 	private JButton Send_Button;
 	private JButton Connect_Button;
-	private JButton Stop_Button;
+	private JButton Disconnect_Button;
 	private String User_IP = "0.0.0.0";
 	private String User_name = "Aleen";
 	private String port_textbox_text_value = "";
 	private String ip_textbox_text_value = "";
 	private String send_textbox_text_value = "";
 	private boolean isConnected = false;
+	private DataBase db = new DataBase();
 	
 	public static SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");	//set time format
 	public static JTextArea Content;
 	private Socket comsocket;
-	public PrintWriter writetoserver;
+	private PrintWriter writetoserver;
 	private BufferedReader readfromserver;
 	private MessageThread messageThread;
-	public static ArrayList<ClientThread> Clients;
 	/**
 	 * Launch the application.
 	 */
@@ -62,9 +62,9 @@ public class Client extends SimpChat{
 			{
 				try 
 				{
-					Client frame = new Client("Client");
-					frame.setVisible(true);
-					port_textbox.requestFocus();
+					Login login = new Login();
+					login.setVisible(true);
+					
 				} 
 				catch (Exception e) 
 				{
@@ -74,7 +74,7 @@ public class Client extends SimpChat{
 		});
 	}
 	
-	Client(String User_type) 
+	Client(String User_type, String username, String IP) 
 	{
 		super(User_type);
 		super.Close_Button.addActionListener(new ActionListener() 
@@ -83,11 +83,20 @@ public class Client extends SimpChat{
 			{
 				if(isConnected == true)
 				{
-					stopConnection();
+					boolean flag = stopConnection();
+					if(flag == false)
+					{
+						sendText("Disconnect Failed!");
+						return;
+					}
 				}
 				System.exit(0);
 			}
 		});
+		
+		this.User_name = username;
+		this.User_IP = IP;
+		
 		/* error information */ 
 		error_Label = new JLabel("Error: ");
 		error_Label.setForeground(new Color(161, 0, 0));
@@ -112,7 +121,23 @@ public class Client extends SimpChat{
 						sendText("You has connected before");
 						return;
 					}
-					serverConnect(ip_textbox_text_value, Integer.parseInt(port_textbox_text_value), User_name, User_IP);
+					boolean flag = serverConnect(ip_textbox_text_value, Integer.parseInt(port_textbox_text_value), User_name, User_IP);
+					if(flag == true)
+					{
+						System.out.println("Connect Succeed\n");
+						sendText("Connect Succeed!");
+						ip_textbox.setEditable(false);
+						ip_textbox.setFocusable(false);
+						port_textbox.setEditable(false);
+						port_textbox.setFocusable(false);
+						Connect_Button.setVisible(false);
+						Disconnect_Button.setVisible(true);
+					}
+					else
+					{
+						System.out.println("Connect Failed\n");
+						sendText("Connect Failed!");
+					}
 				} 
 				catch (Exception e) 
 				{
@@ -125,22 +150,38 @@ public class Client extends SimpChat{
 		Connect_Button.setEnabled(false);
 		getContentPane().add(Connect_Button);
 		
-		/* Close_Button */
-		ImageIcon stopbutton_static = new ImageIcon("./Pic/stopbutton_static.png");
-		ImageIcon stoptbutton_mouseover = new ImageIcon("./Pic/stopbutton_mouseover.png");
-		ImageIcon stoptbutton_pressed = new ImageIcon("./Pic/stopbutton_pressed.png");
-		Stop_Button = new Button(stopbutton_static, stoptbutton_mouseover, stoptbutton_pressed, 1);
-		Stop_Button.setOpaque(false);
-		Stop_Button.setVisible(false);
-		Stop_Button.addActionListener(new ActionListener() 
+		/* Disconnect_Button */
+		ImageIcon disconnectbutton_static = new ImageIcon("./Pic/disconnectbutton_static.png");
+		ImageIcon disconnectbutton_mouseover = new ImageIcon("./Pic/disconnectbutton_mouseover.png");
+		ImageIcon disconnectbutton_pressed = new ImageIcon("./Pic/disconnectbutton_pressed.png");
+		Disconnect_Button = new Button(disconnectbutton_static, disconnectbutton_mouseover, disconnectbutton_pressed, 1);
+		Disconnect_Button.setOpaque(false);
+		Disconnect_Button.setVisible(false);
+		Disconnect_Button.addActionListener(new ActionListener() 
 		{
 			public void actionPerformed(ActionEvent arg0) 
 			{
-				stopConnection();
+				boolean flag = stopConnection();
+				if(flag == true)
+				{
+					System.out.println("Disconnect Succeed!\n");
+					sendText("Disconnect Succeed!");
+					ip_textbox.setEditable(true);
+					ip_textbox.setFocusable(true);
+					port_textbox.setEditable(true);
+					port_textbox.setFocusable(true);
+					Disconnect_Button.setVisible(false);
+					Connect_Button.setVisible(true);
+				}
+				else
+				{
+					System.out.println("Disconnect Failed!\n");
+					sendText("Disconnect Failed!");
+				}
 			}
 		});
-		Stop_Button.setBounds(224, 542, 174, 59);
-		getContentPane().add(Stop_Button);
+		Disconnect_Button.setBounds(224, 542, 174, 59);
+		getContentPane().add(Disconnect_Button);
 		
 		/* ip_textbox */
 		ip_textbox = new JCTextField();
@@ -221,12 +262,12 @@ public class Client extends SimpChat{
 //		Content.setBackground(Color.BLACK);
 //		Content.setEditable(false);
 //		Content.setFocusable(false);
-//		Content.setBorder(null);
+		Content.setBorder(null);
 		Content.setBounds(14, 153, 382, 303);
 		Content.setFont(new Font("Microsoft JhengHei UI", Font.PLAIN, 12));
-		getContentPane().add(Content);
-//		ScrollBox scroll_Content = new ScrollBox(list);
-//		getContentPane().add(scroll_Content);
+		ScrollBox scroll_Content = new ScrollBox(Content);
+		scroll_Content.setBounds(14, 153, 382, 303);
+		getContentPane().add(scroll_Content);
 		
 		/* input_box */
 		input_box = new JCTextField();
@@ -340,13 +381,14 @@ public class Client extends SimpChat{
 	}
 	
 	//Start the Server
-	private void serverConnect(String host, int port, String name, String User_IP)
+	private boolean serverConnect(String host, int port, String name, String User_IP)
 	{
 		try 
 		{
 			comsocket = new Socket(host, port);															//Connect to host:port
 			writetoserver = new PrintWriter(comsocket.getOutputStream());
 			readfromserver = new BufferedReader(new InputStreamReader(comsocket.getInputStream()));
+			
 			
 			writetoserver.println(name);
 			writetoserver.flush();
@@ -358,19 +400,21 @@ public class Client extends SimpChat{
 			messageThread.start();
 			
 			isConnected = true;
-			sendText("Connect Successfully");
+			db.Update_status(User_name, User_IP, "online");
+			return true;
+//			sendText("Connect Successfully");
 		} 
 		catch (Exception e) 
 		{
 			// TODO Auto-generated catch block
-			sendText("Connect Failed");
 			e.printStackTrace();
 			isConnected = false;
+			return false;
 		}
 	}
 	
 	@SuppressWarnings("deprecation")
-	public synchronized void stopConnection() {
+	public synchronized boolean stopConnection() {
 		try {
 			writetoserver.println("CLOSE");
 			writetoserver.flush();
@@ -379,12 +423,15 @@ public class Client extends SimpChat{
 			comsocket.close();
 			messageThread.stop();
 			isConnected = false;
+			db.Update_status(User_name, User_IP, "offline");
+			return true;
 		} 
 		catch (Exception e) 
 		{
 			sendText("Stop Connect Failed");
 			e.printStackTrace();
 			isConnected = true;
+			return false;
 		}
 	}
 	
