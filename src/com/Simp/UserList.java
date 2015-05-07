@@ -30,8 +30,8 @@ public class UserList extends JPanel {
 	private int index;	
 	
 	private String Status = "null";
-	private String User_name = "Name";
-	private String IPV4_adress = "0.0.0.0";
+	private String User_name = " ";
+	private String IPV4_adress = " ";
 	private JPanel Add_user_panel;
 	private JLabel Name_Label;
 	private JLabel IPV4_Label;
@@ -52,6 +52,7 @@ public class UserList extends JPanel {
 	{
 		return listItem;
 	}
+	
 	
 	public UserList(Image img, JPanel add_user_panel, JLabel name_label, JLabel ipv4_label, JLabel status_label, JTextField user_name_textbox) 
     { 

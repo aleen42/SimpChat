@@ -75,7 +75,7 @@ public class MessageThread extends Thread
 					Content.append(Client.df.format(new Date()) + "\t" + get_username + "/" + get_ip + "is offline.\n");
 					break;
 				case "MESSAGE":
-					Content.append(stringTokenizer.nextToken() + "\n");
+					Content.append(Client.df.format(new Date()) + "\t" + stringTokenizer.nextToken() + "\n");
 					break;
 				default:
 					break;

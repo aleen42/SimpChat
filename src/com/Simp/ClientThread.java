@@ -57,7 +57,7 @@ public class ClientThread extends Thread {
 //			writetoclient.flush();
 //			System.out.println(Server.Clients.size());	
 			if (Server.Clients.size() >= 0) {
-				writetoclient.println("MESSAGE@" + Server.df.format(new Date()) + "\t" + "There are "+ Server.Clients.size() +" online users except you.");			//Reply a number of online users
+				writetoclient.println("MESSAGE@" + "There are "+ Server.Clients.size() +" online users except you.");			//Reply a number of online users
 				writetoclient.flush();
 			}
 			
@@ -117,6 +117,31 @@ public class ClientThread extends Thread {
 							Server.Clients.remove(i);
 							temp.stop();
 							return;
+						}
+					}
+					break;
+				case "PUBLIC_MESSAGE":
+					String public_text = stringTokenizer.nextToken();
+					Server.sendText(User_name + "/" + IP + " said to all: " + public_text);
+					for(int i = Server.Clients.size() - 1; i >= 0; i--) 
+					{											
+						if(Server.Clients.get(i).getUser().equals(User_name) && Server.Clients.get(i).getIP().equals(IP))
+							continue;
+						Server.Clients.get(i).getWriter().println("MESSAGE@" + User_name + "/" + IP + " said to all: " + public_text);			//Reply offline information to other clients
+						Server.Clients.get(i).getWriter().flush();
+					}
+					break;
+				case "PRIVATE_MESSAGE":
+					String des_username = stringTokenizer.nextToken();
+					String des_ip = stringTokenizer.nextToken();
+					String private_text = stringTokenizer.nextToken();
+					Server.sendText(User_name + "/" + IP + " said to all: " + private_text);
+					for(int i = Server.Clients.size() - 1; i >= 0; i--) 
+					{											
+						if(Server.Clients.get(i).getUser().equals(des_username) && Server.Clients.get(i).getIP().equals(des_ip))
+						{
+							Server.Clients.get(i).getWriter().println("MESSAGE@" + User_name + "/" + IP + " said to you: " + private_text);			//Reply offline information to other clients
+							Server.Clients.get(i).getWriter().flush();
 						}
 					}
 					break;

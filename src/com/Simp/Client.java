@@ -34,6 +34,8 @@ public class Client extends SimpChat{
 	private JTextField ip_textbox;
 	public static JCTextField port_textbox;
 	private JLabel error_Label;
+	private JLabel name_Label;
+	private JLabel ipv4_Label;
 	private JButton Send_Button;
 	private JButton Connect_Button;
 	private JButton Disconnect_Button;
@@ -98,6 +100,8 @@ public class Client extends SimpChat{
 		this.userlist = super.userlist;
 		this.User_name = username;
 		this.User_IP = IP;
+		this.name_Label = super.Name_Label;
+		this.ipv4_Label = super.IPV4_Label;
 		
 		/* error information */ 
 		error_Label = new JLabel("Error: ");
@@ -272,6 +276,25 @@ public class Client extends SimpChat{
 		input_box.setVisible(true);
 		input_box.setFont(new Font("Microsoft JhengHei UI", Font.PLAIN, 13));
 		input_box.setBounds(14, 464, 280, 24);
+		input_box.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String reserve = "IP: ";
+				sendText(send_textbox_text_value);
+				if(!name_Label.isVisible())
+				{
+					writetoserver.println("PUBLIC_MESSAGE@" + send_textbox_text_value);
+					writetoserver.flush();
+				}
+				else
+				{
+					writetoserver.println("PRIVATE_MESSAGE@" + name_Label.getText() + "@" + ipv4_Label.getText().substring(reserve.length(), ipv4_Label.getText().length()) + "@" + send_textbox_text_value);
+					writetoserver.flush();
+				}
+				input_box.setText("");														//clear input_box
+				input_box.requestFocus();
+			}
+		});
+		
 		input_box.getDocument().addDocumentListener(new DocumentListener(){		//Listen to the input
         	public void insertUpdate(DocumentEvent e) 
         	{
@@ -309,7 +332,19 @@ public class Client extends SimpChat{
 		{
 			public void actionPerformed(ActionEvent arg0) 
 			{
+				String reserve = "IP: ";
 				sendText(send_textbox_text_value);
+				if(!name_Label.isVisible())
+				{
+					writetoserver.println("PUBLIC_MESSAGE@" + send_textbox_text_value);
+					writetoserver.flush();
+				}
+				else
+				{
+					writetoserver.println("PRIVATE_MESSAGE@" + name_Label.getText() + "@" + ipv4_Label.getText().substring(reserve.length(), ipv4_Label.getText().length()) + "@" + send_textbox_text_value);
+					writetoserver.flush();
+				}
+				
 				input_box.setText("");														//clear input_box
 				input_box.requestFocus();
 			}

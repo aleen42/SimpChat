@@ -24,8 +24,8 @@ public class SimpChat extends JFrame
 	public JButton Close_Button;
 	public UserList userlist;
 	private JLabel error_label;
- 	private JLabel Name_Label;
-	private JLabel IPV4_Label;
+ 	public JLabel Name_Label;
+	public JLabel IPV4_Label;
 	private JLabel Status_Label;
 	private JPanel Add_user_panel;
 	private JTextField User_name_textbox;

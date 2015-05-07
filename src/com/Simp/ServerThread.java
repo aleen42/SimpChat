@@ -69,9 +69,24 @@ public class ServerThread extends Thread{
 	
 	public void send_message(String text)
 	{
-		for (int i = Server.Clients.size() - 1; i >= 0; i--) {											
-			Server.Clients.get(i).getWriter().println("MESSAGE@" + Server.df.format(new Date()) + "\t" + "The server said: " + text);			//Reply online information to other clients
+		for (int i = Server.Clients.size() - 1; i >= 0; i--) 
+		{											
+			Server.Clients.get(i).getWriter().println("MESSAGE@" + "The server said: " + text);			//Reply online information to other clients
 			Server.Clients.get(i).getWriter().flush();
+		}
+	}
+	
+	public void send_privatemessage(String text, String des_username, String des_ip)
+	{
+		for (int i = Server.Clients.size() - 1; i >= 0; i--) 
+		{	
+			System.out.println(des_username + "\n" + des_ip);
+//			System.out.println(Server.Clients.get(i).getUser() + "\n" + Server.Clients.get(i).getIP());
+			if(Server.Clients.get(i).getUser().equals(des_username) && Server.Clients.get(i).getIP().equals(des_ip))
+			{
+				Server.Clients.get(i).getWriter().println("MESSAGE@" + "The server said to you: " + text);			//Reply online information to other clients
+				Server.Clients.get(i).getWriter().flush();
+			}
 		}
 	}
 }
