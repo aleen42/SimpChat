@@ -142,7 +142,7 @@ public class Client extends SimpChat{
 					}
 					else
 					{
-						System.out.println("Connect Failed\n");
+//						System.out.println("Connect Failed\n");
 						sendText("Connect Failed!");
 					}
 				} 

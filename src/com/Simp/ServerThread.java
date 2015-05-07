@@ -27,14 +27,17 @@ public class ServerThread extends Thread{
 			try 
 			{
 				Socket socket = serverSocket.accept();									//socket for client
-//				System.out.println(Server.Clients.size());
-//				System.out.println(number_limit);
+				System.out.println(Server.Clients.size());
+				System.out.println(number_limit);
 				if(Server.Clients.size() == number_limit)								//Clients number has arrived the number_limit
 				{
 //					BufferedReader read_from_client = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 //					PrintWriter write_to_server = new PrintWriter(socket.getOutputStream());
 					//Handle
-					
+					PrintWriter writetoclient = new PrintWriter(socket.getOutputStream());
+					writetoclient.println("CLOSE@" + Server.df.format(new Date()) + "\t" + "The number of people has arrived the limit number!");
+					writetoclient.flush();
+					writetoclient.close();
 					continue;
 				}
 				ClientThread client = new ClientThread(socket, userlist);
