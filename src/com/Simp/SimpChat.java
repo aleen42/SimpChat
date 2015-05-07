@@ -351,4 +351,11 @@ public class SimpChat extends JFrame
         error_label.setVisible(false);
         return true;	
 	}
+	
+	public void clear_user_info()
+	{
+		Name_Label.setVisible(false);
+		IPV4_Label.setVisible(false);
+		Status_Label.setVisible(false);
+	}
 }

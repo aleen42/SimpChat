@@ -41,7 +41,7 @@ public class MessageThread extends Thread
 				switch(command.toString())
 				{
 				case "CLOSE":																								//The server ask to close your connection
-					Content.append(Client.df.format(new Date()) + "\t" + "The Server has asked you to disconnect!\n");
+					Content.append(stringTokenizer.nextToken() + "\n");
 					client.stopConnection();
 					break;
 					

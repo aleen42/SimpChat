@@ -423,9 +423,8 @@ public class Server extends SimpChat{
 			for (int i = Clients.size() - 1; i >= 0; i--) 
 			{
 				
-				Clients.get(i).getWriter().println(df.format(new Date()) + "\t" + "The server has been close!");							//send stop information to the client
+				Clients.get(i).getWriter().println("CLOSE@" + df.format(new Date()) + "\t" + "The server has been close!");							//send stop information to the client
 				Clients.get(i).getWriter().flush();
-				
 				/* Released Sources */
 				Clients.get(i).getReader().close();
 				Clients.get(i).getWriter().close();
@@ -436,6 +435,9 @@ public class Server extends SimpChat{
 			if (serverSocket != null) {
 				serverSocket.close();													//close Socket of the server 
 			}
+			
+			userlist.get_listItem().removeAllElements();
+			super.clear_user_info();
 			isStarted = false;
 		}
 		catch (IOException e) 

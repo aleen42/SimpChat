@@ -168,13 +168,6 @@ public class Client extends SimpChat{
 				if(flag == true)
 				{
 //					System.out.println("Disconnect Succeed!\n");
-					sendText("Disconnect Succeed!");
-					ip_textbox.setEditable(true);
-					ip_textbox.setFocusable(true);
-					port_textbox.setEditable(true);
-					port_textbox.setFocusable(true);
-					Disconnect_Button.setVisible(false);
-					Connect_Button.setVisible(true);
 				}
 				else
 				{
@@ -421,15 +414,24 @@ public class Client extends SimpChat{
 	@SuppressWarnings("deprecation")
 	public synchronized boolean stopConnection() {
 		try {
+			System.out.println("close");
 			writetoserver.println("CLOSE@");
 			writetoserver.flush();
 			readfromserver.close();
 			writetoserver.close();
 			comsocket.close();
-			messageThread.stop();
 			isConnected = false;
 			db.Update_status(User_name, User_IP, "offline");
 			userlist.get_listItem().clear();
+			super.clear_user_info();
+			sendText("Disconnect Succeed!");
+			ip_textbox.setEditable(true);
+			ip_textbox.setFocusable(true);
+			port_textbox.setEditable(true);
+			port_textbox.setFocusable(true);
+			Disconnect_Button.setVisible(false);
+			Connect_Button.setVisible(true);
+			messageThread.stop();
 			return true;
 		} 
 		catch (Exception e) 
