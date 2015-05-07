@@ -23,18 +23,15 @@ public class SimpChat extends JFrame
 	
 	public JButton Close_Button;
 	public UserList userlist;
-	private static JLabel error_label;
- 	private static JLabel Name_Label;
-	private static JLabel IPV4_Label;
-	private static JLabel Status_Label;
-	public static String Status = "null";
-	public static String User_name = "Name";
-	public static String IPV4_adress = "0.0.0.0";
-	public static JPanel Add_user_panel;
-	public static JTextField User_name_textbox;
-	public static JTextField Ip_textbox;
-	public static String User_name_textbox_text_value = "";
-	public static String Ip_textbox_text_value = "";
+	private JLabel error_label;
+ 	private JLabel Name_Label;
+	private JLabel IPV4_Label;
+	private JLabel Status_Label;
+	private JPanel Add_user_panel;
+	private JTextField User_name_textbox;
+	private JTextField Ip_textbox;
+	private String User_name_textbox_text_value = "";
+	private String Ip_textbox_text_value = "";
 	
 //	private TrayIcon trayIcon = null; // Icon
 //	private SystemTray tray = null; // Task Bar
@@ -159,31 +156,6 @@ public class SimpChat extends JFrame
 		error_label.setVisible(false);
 		Add_user_panel.add(error_label);
 		
-		/* User List */
-		
-			/* JPanel */
-		Image userlist_bg = this.getToolkit().getImage("./Pic/userlist_bg.png");
-		userlist = new UserList(userlist_bg);
-		userlist.setBounds((int)(scrSize.width * 0.3) - 4, 30, 200, 400);
-		contentPane.add(userlist);
-		
-			/* Button */
-		ImageIcon userlist_button_bg = new ImageIcon("./Pic/userlistbutton_static.png");
-		ImageIcon userlist_button_mouseover = new ImageIcon("./Pic/userlistbutton_mouseover.png");
-		ImageIcon userlist_button_pressed = new ImageIcon("./Pic/userlistbutton_pressed.png");
-		JButton UserList_Button = new Button(userlist_button_bg, userlist_button_mouseover, userlist_button_pressed, 1);
-		UserList_Button.setOpaque(false);
-		UserList_Button.addActionListener(new ActionListener() 
-		{
-			public void actionPerformed(ActionEvent arg0) 
-			{
-				Show_UserList(isUserListShown, userlist);
-//				setVisible(true);	//set the Z order of JFrames
-			}
-		});
-		UserList_Button.setBounds(379, 50, 28, 84);
-		contentPane.add(UserList_Button);		
-		
 		/* Close Button */
 		ImageIcon close_button_bg = new ImageIcon("./Pic/closebutton_static.png");
 		ImageIcon close_button_mouseover = new ImageIcon("./Pic/closebutton_mouseover.png");
@@ -222,7 +194,7 @@ public class SimpChat extends JFrame
 		contentPane.add(Minimize_Button);
 		
 		/* Title */
-		JLabel Title = new JLabel(User_name);
+		JLabel Title = new JLabel();
 		Title.setFont(new Font("Microsoft JhengHei UI", Font.BOLD, 60));
 		Title.setForeground(new Color(161, 0, 0));
 		Title.setBounds(420, 551, 185, 53);
@@ -230,7 +202,7 @@ public class SimpChat extends JFrame
 		contentPane.add(Title);
 		
 		/* Name Label */
-		Name_Label = new JLabel(User_name);
+		Name_Label = new JLabel();
 		Name_Label.setFont(new Font("Microsoft JhengHei UI", Font.BOLD, 40));
 		Name_Label.setForeground(new Color(161, 0, 0));
 		Name_Label.setBounds(48, 32, 185, 53);
@@ -238,7 +210,7 @@ public class SimpChat extends JFrame
 		contentPane.add(Name_Label);
 		
 		/* IPV4 Label */
-		IPV4_Label = new JLabel(IPV4_adress);
+		IPV4_Label = new JLabel();
 		IPV4_Label.setFont(new Font("Microsoft JhengHei UI", Font.PLAIN, 17));
 		IPV4_Label.setForeground(Color.BLACK);
 		IPV4_Label.setBounds(48, 108, 230, 46);
@@ -246,12 +218,37 @@ public class SimpChat extends JFrame
 		contentPane.add(IPV4_Label);
 		
 		/* Status Label */
-		Status_Label = new JLabel(Status);
+		Status_Label = new JLabel();
 		Status_Label.setFont(new Font("Microsoft JhengHei UI", Font.PLAIN, 14));
 		Status_Label.setForeground(Color.BLACK);
 		Status_Label.setBounds(48, 65, 230, 46);
 		Status_Label.setVisible(false);
 		contentPane.add(Status_Label);
+		
+		
+		/* User List */
+			/* JPanel */
+		Image userlist_bg = this.getToolkit().getImage("./Pic/userlist_bg.png");
+		userlist = new UserList(userlist_bg, Add_user_panel, Name_Label, IPV4_Label, Status_Label, User_name_textbox);
+		userlist.setBounds((int)(scrSize.width * 0.3) - 4, 30, 200, 400);
+		contentPane.add(userlist);
+		
+			/* Button */
+		ImageIcon userlist_button_bg = new ImageIcon("./Pic/userlistbutton_static.png");
+		ImageIcon userlist_button_mouseover = new ImageIcon("./Pic/userlistbutton_mouseover.png");
+		ImageIcon userlist_button_pressed = new ImageIcon("./Pic/userlistbutton_pressed.png");
+		JButton UserList_Button = new Button(userlist_button_bg, userlist_button_mouseover, userlist_button_pressed, 1);
+		UserList_Button.setOpaque(false);
+		UserList_Button.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent arg0) 
+			{
+				Show_UserList(isUserListShown);
+//				setVisible(true);	//set the Z order of JFrames
+			}
+		});
+		UserList_Button.setBounds(379, 50, 28, 84);
+		contentPane.add(UserList_Button);		
 		
 		
 		
@@ -292,36 +289,14 @@ public class SimpChat extends JFrame
 //		}
 	}
 	
-	public static void update_AddUser_Label(boolean visible)
-	{
-		Add_user_panel.setVisible(!visible);
-	}
 	
-	public static void update_UserName_Label(boolean visible)
-	{
-		Name_Label.setVisible(visible);
-		Name_Label.setText(User_name);
-	}
-	
-	public static void update_Status_Label(boolean visible)
-	{
-		Status_Label.setVisible(visible);
-		Status_Label.setText("(" + Status + ")");
-	}
-	
-	public static void update_IPV4_Label(boolean visible)
-	{
-		IPV4_Label.setVisible(visible);
-		IPV4_Label.setText("IP: " + IPV4_adress);
-	}
-	
-	public void Show_UserList(boolean isthere, JPanel userlist_window)
+	public void Show_UserList(boolean isthere)
 	{
 		if(isthere)
 			Add_user_panel.setVisible(false);
 		else
-			Add_user_panel.setVisible(UserList.isAddUserPanelShown);
-		userlist_window.setVisible(!isthere);
+			Add_user_panel.setVisible(userlist.isAddUserPanelShown);
+		userlist.setVisible(!isthere);
 		isUserListShown = !isthere;
 		
 	}

@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Date;
+import java.util.StringTokenizer;
 
 //a thread used to serve the client
 public class ClientThread extends Thread {
@@ -15,6 +16,8 @@ public class ClientThread extends Thread {
 	private PrintWriter writetoclient;
 	private String User_name = "";
 	private String IP = "";
+	private DataBase db = new DataBase();
+	private UserList userlist;
 	
 	public Socket getSocket()
 	{
@@ -39,8 +42,9 @@ public class ClientThread extends Thread {
 		return IP;
 	}
 	
-	ClientThread(Socket socket)
+	ClientThread(Socket socket, UserList list)
 	{
+		this.userlist = list;
 		try 
 		{
 			this.socket = socket;
@@ -51,17 +55,22 @@ public class ClientThread extends Thread {
 			writetoclient = new PrintWriter(socket.getOutputStream());
 //			writetoclient.println(Server.df.format(new Date()) + "\t" + User_name + "/" + IP + "\t" + "Connect Successfully!");					//Reply connect successfully
 //			writetoclient.flush();
-//			System.out.println(Server.Clients.size());
+//			System.out.println(Server.Clients.size());	
 			if (Server.Clients.size() >= 0) {
-				writetoclient.println(Server.df.format(new Date()) + "\t" + "There are "+ (Server.Clients.size() + 1) +" online users.");			//Reply a number of online users
+				writetoclient.println("MESSAGE@" + Server.df.format(new Date()) + "\t" + "There are "+ Server.Clients.size() +" online users except you.");			//Reply a number of online users
 				writetoclient.flush();
 			}
 			
 			for (int i = Server.Clients.size() - 1; i >= 0; i--) {											
-				Server.Clients.get(i).getWriter().println(Server.df.format(new Date()) + "\t" + User_name + "/" + IP + " is online!");			//Reply online information to other clients
+				Server.Clients.get(i).getWriter().println("ADD@" + User_name + "@" + IP);			//Reply online information to other clients
 				Server.Clients.get(i).getWriter().flush();
 			}
-			Server.userlist.UpdateList();
+			
+			for (int i = Server.Clients.size() - 1; i >= 0; i--) {											
+				writetoclient.println("ADD@" + Server.Clients.get(i).getUser() + "@" + Server.Clients.get(i).getIP());			//Reply online information of other clients to me
+				writetoclient.flush();
+			}
+			
 		} 
 		catch (IOException e) 
 		{
@@ -73,25 +82,31 @@ public class ClientThread extends Thread {
 	@SuppressWarnings("deprecation")
 	public void run()
 	{
-		String message = null;
+		String message = "";
 		while (true) 																						//always listen to the client message
 		{
 			try 
 			{
 				message = readfromclient.readLine();	//receive message from clients
-//				System.out.println(readfromclient.readLine());
-				if(message.equals("CLOSE"))
+				StringTokenizer stringTokenizer = new StringTokenizer(message, "@");
+				String command = stringTokenizer.nextToken();
+
+				switch(command.toString())
 				{
-					Server.sendText(User_name + "/" + IP + " is offline!");			
+				case "CLOSE":
+					Server.sendText(User_name + "/" + IP + " is offline!");	
 					/* Release Sources */
 					readfromclient.close();
 					writetoclient.close();
 					socket.close();
 					for(int i = Server.Clients.size() - 1; i >= 0; i--) 
 					{											
-						Server.Clients.get(i).getWriter().println(Server.df.format(new Date()) + "\t" + User_name + "/" + IP + " is offline!");			//Reply offline information to other clients
+						Server.Clients.get(i).getWriter().println("DELETE@" + User_name + "@" + IP);			//Reply offline information to other clients
 						Server.Clients.get(i).getWriter().flush();
 					}
+					
+					/* remove list */
+					userlist.get_listItem().removeElement(User_name + "/" + IP);
 					
 					/* delete the thread */
 					for(int i = Server.Clients.size() - 1; i >= 0; i--) 
@@ -104,20 +119,21 @@ public class ClientThread extends Thread {
 							return;
 						}
 					}
-					
-					Server.userlist.UpdateList();
-					
+					break;
+				default:
+					break;
+				
 				}
-				else
-				{
-					/* public sent */
-					for(int i = Server.Clients.size() - 1; i >= 0; i--) 
-					{											
-						Server.Clients.get(i).getWriter().println(Server.df.format(new Date()) + "\t" + User_name + "/" + IP + " said:\t" + message);			//Reply offline information to other clients
-						Server.Clients.get(i).getWriter().flush();
-					}
-					Server.Content.append(Server.df.format(new Date()) + "\t" + User_name + "/" + IP + " said:\t" + message + "\n");
-				}		
+//				else
+//				{
+//					/* public sent */
+//					for(int i = Server.Clients.size() - 1; i >= 0; i--) 
+//					{											
+//						Server.Clients.get(i).getWriter().println(Server.df.format(new Date()) + "\t" + User_name + "/" + IP + " said:\t" + message);			//Reply offline information to other clients
+//						Server.Clients.get(i).getWriter().flush();
+//					}
+//					Server.Content.append(Server.df.format(new Date()) + "\t" + User_name + "/" + IP + " said:\t" + message + "\n");
+//				}		
 			} 
 			catch (IOException e) 
 			{

@@ -5,6 +5,7 @@ import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
 import java.awt.*;
@@ -26,22 +27,41 @@ public class UserList extends JPanel {
 	
 	private Image img;
 	private JList list;
-	private int index;
+	private int index;	
+	
+	private String Status = "null";
+	private String User_name = "Name";
+	private String IPV4_adress = "0.0.0.0";
+	private JPanel Add_user_panel;
+	private JLabel Name_Label;
+	private JLabel IPV4_Label;
+	private JLabel Status_Label;
+	private JTextField User_name_textbox;
 	
 	private static final int empty_size = 2;
 	private DataBase db = new DataBase();
-	private static DefaultListModel listItem;
-	public static String User_name_store;
-	public static boolean isAddUserPanelShown = false;
-	public static void add_item()
+	private DefaultListModel listItem;
+	public boolean isAddUserPanelShown = false;
+	public String User_name_store = "";
+	public void add_item()
 	{
 		listItem.addElement(User_name_store);
 	}
 	
-	public UserList(Image img) 
+	public DefaultListModel get_listItem()
+	{
+		return listItem;
+	}
+	
+	public UserList(Image img, JPanel add_user_panel, JLabel name_label, JLabel ipv4_label, JLabel status_label, JTextField user_name_textbox) 
     { 
 		/* paint background */
         this.img = img; 
+        this.Add_user_panel = add_user_panel;
+        this.Name_Label = name_label;
+        this.IPV4_Label = ipv4_label;
+        this.Status_Label = status_label;
+        this.User_name_textbox = user_name_textbox;
         Dimension size = new Dimension(img.getWidth(null),img.getHeight(null)); 
         setSize(new Dimension(533, 400));
         setMinimumSize(size); 
@@ -58,9 +78,9 @@ public class UserList extends JPanel {
 		{
 			public void actionPerformed(ActionEvent arg0) 
 			{
-				SimpChat.update_AddUser_Label(isAddUserPanelShown);
+				update_AddUser_Label(isAddUserPanelShown);
 				isAddUserPanelShown = !isAddUserPanelShown;
-				SimpChat.User_name_textbox.requestFocus();							//the component gets focus
+				User_name_textbox.requestFocus();							//the component gets focus
 			}
 		});
 		Useradd_Button.setBounds(128, 361, 25, 29);
@@ -82,8 +102,8 @@ public class UserList extends JPanel {
 				db.delet_User(index - empty_size + 1);
 				listItem.remove(index);							//delete selected user
 				/* hide label */
-				SimpChat.update_UserName_Label(false);	
-				SimpChat.update_IPV4_Label(false);
+				update_UserName_Label(false);	
+				update_IPV4_Label(false);
 				index = 0;
 			}
 		});
@@ -124,57 +144,88 @@ public class UserList extends JPanel {
 
         /* List_panel */
         listItem = new DefaultListModel();
-        UpdateList();
         list = new JList(listItem);
         list.setCellRenderer(new CListCellRenderer());
         list.setFont(new Font("Microsoft JhengHei UI", Font.PLAIN, 15));
+//        UpdateList();
         list.addMouseListener(new MouseAdapter() {					/* Listen to the select */
         	public void mouseReleased(MouseEvent e)
         	{
-        		index = list.getSelectedIndex();
-        		SimpChat.User_name = list.getSelectedValue().toString();
-        		if(SimpChat.User_name == " ")
+        		if(list.getSelectedValue().toString().equals(" "))
         		{
-        			SimpChat.update_UserName_Label(false);
-        			SimpChat.update_IPV4_Label(false);
-        			SimpChat.update_Status_Label(false);
+        			update_UserName_Label(false);
+        			update_IPV4_Label(false);
+        			update_Status_Label(false);
         			return;
-        		}	
-        		SimpChat.update_UserName_Label(true);
-        		SimpChat.IPV4_adress = db.get_ipv4(index - empty_size + 1);
-        		SimpChat.update_IPV4_Label(true);
-        		SimpChat.Status = db.get_status(index - empty_size + 1);
-        		SimpChat.update_Status_Label(true);
+        		}
+        		User_name = list.getSelectedValue().toString().substring(0, list.getSelectedValue().toString().indexOf("/"));
+        		update_UserName_Label(true);
+        		IPV4_adress = list.getSelectedValue().toString().substring(list.getSelectedValue().toString().indexOf("/") + 1, list.getSelectedValue().toString().length());
+        		update_IPV4_Label(true);
+        		Status = db.get_status(User_name, IPV4_adress);
+        	    update_Status_Label(true);
+        	    
         	}
         	
 		});
         ScrollBox scroll_list = new ScrollBox(list);
 //        JCScrollPane scroll_list = new JCScrollPane(list);
         scroll_list.setBounds(20, 40, 170, 300);
-//        scroll_list.setImage(img);
+
         add(scroll_list);
-        SwingUtilities.updateComponentTreeUI (scroll_list);
+//        SwingUtilities.updateComponentTreeUI (scroll_list);
           
         setVisible(false);
     } 
 	
-	
-	public void UpdateList()
+	public void ClearList()
 	{
 		listItem.clear();
-		for(int i = 1; i <= empty_size; i++)
-	    {
-			listItem.addElement(" ");
-	    }
-		db.get_User_name();
-		for(int i = 1; i <= empty_size; i++)
-	    {
-			listItem.addElement(" ");
-	    }
 	}
+	
+//	public void UpdateList()
+//	{
+//		listItem.clear();
+//		for(int i = 1; i <= empty_size; i++)
+//	    {
+//			listItem.addElement(" ");
+//	    }
+//		db.get_User_name(listItem);
+//		for(int i = 1; i <= empty_size; i++)
+//	    {
+//			listItem.addElement(" ");
+//	    }
+//		update_UserName_Label(false);
+//		update_IPV4_Label(false);
+//		update_Status_Label(false);
+//		
+//	}
 	//Override paintComponent 
     public void paintComponent(Graphics g) 
     { 
         g.drawImage(img, 0, 0, null); 
     } 
+    
+    public void update_AddUser_Label(boolean visible)
+	{
+		Add_user_panel.setVisible(!visible);
+	}
+	
+	public void update_UserName_Label(boolean visible)
+	{
+		Name_Label.setVisible(visible);
+		Name_Label.setText(User_name);
+	}
+	
+	public void update_Status_Label(boolean visible)
+	{
+		Status_Label.setVisible(visible);
+		Status_Label.setText("(" + Status + ")");
+	}
+	
+	public void update_IPV4_Label(boolean visible)
+	{
+		IPV4_Label.setVisible(visible);
+		IPV4_Label.setText("IP: " + IPV4_adress);
+	}
 }

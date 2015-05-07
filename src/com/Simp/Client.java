@@ -39,10 +39,11 @@ public class Client extends SimpChat{
 	private JButton Disconnect_Button;
 	private String User_IP = "0.0.0.0";
 	private String User_name = "Aleen";
-	private String port_textbox_text_value = "";
-	private String ip_textbox_text_value = "";
+	private String port_textbox_text_value = "6666";
+	private String ip_textbox_text_value = "127.0.0.1";
 	private String send_textbox_text_value = "";
 	private boolean isConnected = false;
+	private UserList userlist;
 	private DataBase db = new DataBase();
 	
 	public static SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");	//set time format
@@ -94,6 +95,7 @@ public class Client extends SimpChat{
 			}
 		});
 		
+		this.userlist = super.userlist;
 		this.User_name = username;
 		this.User_IP = IP;
 		
@@ -124,7 +126,7 @@ public class Client extends SimpChat{
 					boolean flag = serverConnect(ip_textbox_text_value, Integer.parseInt(port_textbox_text_value), User_name, User_IP);
 					if(flag == true)
 					{
-						System.out.println("Connect Succeed\n");
+//						System.out.println("Connect Succeed\n");
 						sendText("Connect Succeed!");
 						ip_textbox.setEditable(false);
 						ip_textbox.setFocusable(false);
@@ -132,6 +134,7 @@ public class Client extends SimpChat{
 						port_textbox.setFocusable(false);
 						Connect_Button.setVisible(false);
 						Disconnect_Button.setVisible(true);
+//						userlist.UpdateList();
 					}
 					else
 					{
@@ -164,7 +167,7 @@ public class Client extends SimpChat{
 				boolean flag = stopConnection();
 				if(flag == true)
 				{
-					System.out.println("Disconnect Succeed!\n");
+//					System.out.println("Disconnect Succeed!\n");
 					sendText("Disconnect Succeed!");
 					ip_textbox.setEditable(true);
 					ip_textbox.setFocusable(true);
@@ -186,6 +189,7 @@ public class Client extends SimpChat{
 		/* ip_textbox */
 		ip_textbox = new JCTextField();
 		ip_textbox.setVisible(true);
+		ip_textbox.setText("127.0.0.1");
 //		num_limit_textbox.setEditable(false);
 //		num_limit_textbox.setFocusable(false);
 		ip_textbox.setFont(new Font("Microsoft JhengHei UI", Font.PLAIN, 13));
@@ -213,6 +217,7 @@ public class Client extends SimpChat{
 		
 		/* port_textbox */
 		port_textbox = new JCTextField();
+		port_textbox.setText("6666");
 		port_textbox.setVisible(true);
 //		port_textbox.setEditable(false);
 //		port_textbox.setFocusable(false);
@@ -381,7 +386,7 @@ public class Client extends SimpChat{
 	}
 	
 	//Start the Server
-	private boolean serverConnect(String host, int port, String name, String User_IP)
+	private synchronized boolean serverConnect(String host, int port, String name, String User_IP)
 	{
 		try 
 		{
@@ -396,7 +401,7 @@ public class Client extends SimpChat{
 			writetoserver.flush();
 			
 			//Thread to get message
-			messageThread = new MessageThread(readfromserver, Content);
+			messageThread = new MessageThread(readfromserver, Content, userlist, this);
 			messageThread.start();
 			
 			isConnected = true;
@@ -416,7 +421,7 @@ public class Client extends SimpChat{
 	@SuppressWarnings("deprecation")
 	public synchronized boolean stopConnection() {
 		try {
-			writetoserver.println("CLOSE");
+			writetoserver.println("CLOSE@");
 			writetoserver.flush();
 			readfromserver.close();
 			writetoserver.close();
@@ -424,11 +429,12 @@ public class Client extends SimpChat{
 			messageThread.stop();
 			isConnected = false;
 			db.Update_status(User_name, User_IP, "offline");
+			userlist.get_listItem().clear();
 			return true;
 		} 
 		catch (Exception e) 
 		{
-			sendText("Stop Connect Failed");
+			sendText("Disconnect Failed");
 			e.printStackTrace();
 			isConnected = true;
 			return false;
