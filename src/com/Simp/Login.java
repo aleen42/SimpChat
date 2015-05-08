@@ -31,9 +31,9 @@ public class Login extends JFrame{
 	private int point_x, point_y;
 	private boolean isDragging = false;
 	private JTextField user_textbox;
-	private String user_textbox_text_value = "a";
+	private String user_textbox_text_value = "";
 	private JCTextField ip_textbox;
-	private String ip_textbox_text_value = "126.1.1.1";
+	private String ip_textbox_text_value = "";
 	private JLabel error_label;
 	private JButton Login_Button;
 	private JButton SignUp_Button;
@@ -123,7 +123,7 @@ public class Login extends JFrame{
 		/* user_textbox */
 		user_textbox = new JCTextField();
 		user_textbox.setVisible(true);
-		user_textbox.setText("a");
+//		user_textbox.setText("a");
 		user_textbox.setFont(new Font("Microsoft JhengHei UI", Font.PLAIN, 13));
 		user_textbox.setBounds(136, 60, 233, 24);
 		user_textbox.getDocument().addDocumentListener(new DocumentListener(){		//Listen to the input
@@ -153,7 +153,7 @@ public class Login extends JFrame{
 		/* ip_textbox */
 		ip_textbox = new JCTextField();
 		ip_textbox.setVisible(true);
-		ip_textbox.setText("126.1.1.1");
+//		ip_textbox.setText("126.1.1.1");
 		ip_textbox.setFont(new Font("Microsoft JhengHei UI", Font.PLAIN, 13));
 		ip_textbox.setBounds(136, 100, 233, 24);
 		ip_textbox.getDocument().addDocumentListener(new DocumentListener(){		//Listen to the input

@@ -41,8 +41,8 @@ public class Client extends SimpChat{
 	private JButton Disconnect_Button;
 	private String User_IP = "0.0.0.0";
 	private String User_name = "Aleen";
-	private String port_textbox_text_value = "6666";
-	private String ip_textbox_text_value = "127.0.0.1";
+	private String port_textbox_text_value = "";
+	private String ip_textbox_text_value = "";
 	private String send_textbox_text_value = "";
 	private boolean isConnected = false;
 	private UserList userlist;
@@ -186,7 +186,7 @@ public class Client extends SimpChat{
 		/* ip_textbox */
 		ip_textbox = new JCTextField();
 		ip_textbox.setVisible(true);
-		ip_textbox.setText("127.0.0.1");
+//		ip_textbox.setText("127.0.0.1");
 //		num_limit_textbox.setEditable(false);
 //		num_limit_textbox.setFocusable(false);
 		ip_textbox.setFont(new Font("Microsoft JhengHei UI", Font.PLAIN, 13));
@@ -214,7 +214,7 @@ public class Client extends SimpChat{
 		
 		/* port_textbox */
 		port_textbox = new JCTextField();
-		port_textbox.setText("6666");
+//		port_textbox.setText("6666");
 		port_textbox.setVisible(true);
 //		port_textbox.setEditable(false);
 //		port_textbox.setFocusable(false);

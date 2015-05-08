@@ -35,8 +35,8 @@ public class Server extends SimpChat{
 	private JButton Send_Button;
 	private JButton Start_Button;
 	private JButton Stop_Button;
-	private String port_textbox_text_value = "6666";
-	private String num_limit_textbox_text_value = "10";
+	private String port_textbox_text_value = "";
+	private String num_limit_textbox_text_value = "";
 	private String send_textbox_text_value = "";
 	private boolean isStarted = false;
 	
@@ -172,7 +172,7 @@ public class Server extends SimpChat{
 		/* num_limit_textbox */
 		num_limit_textbox = new JCTextField();
 		num_limit_textbox.setVisible(true);
-		num_limit_textbox.setText("10");
+//		num_limit_textbox.setText("10");
 //		num_limit_textbox.setEditable(false);
 //		num_limit_textbox.setFocusable(false);
 		num_limit_textbox.setFont(new Font("Microsoft JhengHei UI", Font.PLAIN, 13));
@@ -201,7 +201,7 @@ public class Server extends SimpChat{
 		/* port_textbox */
 		port_textbox = new JCTextField();
 		port_textbox.setVisible(true);
-		port_textbox.setText("6666");
+//		port_textbox.setText("6666");
 //		port_textbox.setEditable(false);
 //		port_textbox.setFocusable(false);
 		port_textbox.setFont(new Font("Microsoft JhengHei UI", Font.PLAIN, 13));

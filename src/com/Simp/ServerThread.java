@@ -27,8 +27,8 @@ public class ServerThread extends Thread{
 			try 
 			{
 				Socket socket = serverSocket.accept();									//socket for client
-				System.out.println(Server.Clients.size());
-				System.out.println(number_limit);
+//				System.out.println(Server.Clients.size());
+//				System.out.println(number_limit);
 				if(Server.Clients.size() == number_limit)								//Clients number has arrived the number_limit
 				{
 //					BufferedReader read_from_client = new BufferedReader(new InputStreamReader(socket.getInputStream()));
