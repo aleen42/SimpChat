@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<classpath>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="E:/eclipse-java-luna-SR2-win32-x86_64/sqljdbc_4.0/cht/sqljdbc4.jar" sourcepath="E:/eclipse-java-luna-SR2-win32-x86_64/sqljdbc_4.0/cht/sqljdbc4.jar"/>
-	<classpathentry kind="output" path="bin"/>
-</classpath>

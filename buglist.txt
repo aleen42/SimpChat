@@ -1,4 +1,0 @@
-1. Panel顺序问题，当底层窗体被掩盖但是并没有屏蔽鼠标信息，当触发draw事件的时候，所draw的东西将覆盖上层Panel。
-2. Frame可以解决上述Panel的特性，但是需要setlocation去跟随主窗体移动（计算主窗体坐标比较复杂）
-3. 最令人诟病的是自定义设计UI存在很大的局限性
-4. Swing透明遇到输入法等于白屏,只能通过重写JTextField的paintComponent()方法：重绘缓存

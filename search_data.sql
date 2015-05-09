@@ -1,1 +1,0 @@
-﻿select t.* from (select Chat.dbo.Listen_User_Table.*, row_number() over (order by User_Name) rn from Chat.dbo.Listen_User_Table) as t where rn = 3;	
