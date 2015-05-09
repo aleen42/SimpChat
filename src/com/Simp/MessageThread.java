@@ -22,6 +22,11 @@ public class MessageThread extends Thread
 		this.Content = Content;
 		this.userlist = list;
 		this.client = c;
+		userlist.get_listItem().clear();
+		for(int i = 1; i <= 2; i++)
+		{
+			userlist.get_listItem().addElement(" ");
+	    }	
 	}
 	
 	public void run() 
@@ -37,6 +42,8 @@ public class MessageThread extends Thread
 //				System.out.println(message);
 				StringTokenizer stringTokenizer = new StringTokenizer(message, "@");
 				String command = stringTokenizer.nextToken();
+				/* Initialize the userlist */
+					
 //				System.out.println(command);
 				switch(command.toString())
 				{
@@ -51,17 +58,8 @@ public class MessageThread extends Thread
 					System.out.println(get_username + "\n" + get_ip);
 //					System.out.println("add");
 					/* update list */
-					userlist.get_listItem().clear();
-					for(int i = 1; i <= 2; i++)
-					{
-						userlist.get_listItem().addElement(" ");
-				    }									
+												
 					userlist.get_listItem().addElement(get_username + "/" + get_ip);
-					for(int i = 1; i <= 2; i++)
-				    {
-						userlist.get_listItem().addElement(" ");
-				    }
-					
 					Content.append(Client.df.format(new Date()) + "\t" + get_username + "/" + get_ip + "is online.\n");
 					break;
 					
