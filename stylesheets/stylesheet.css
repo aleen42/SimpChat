@@ -20,10 +20,11 @@ body {
 
 
 a {
-  color: #1e6bb8;
+  color: #a10000;
+  transition:color 0.2s;
   text-decoration: none; }
   a:hover {
-	color:#000;
+	color:#6f0000;
     text-decoration: none; }
 
 
@@ -160,7 +161,8 @@ a {
   font-size:40px;
   color: #a10000; }
 .main-content p {
-  margin-bottom: 1em; }
+  margin-bottom: 1em;
+  font-size: 20px; }
 .main-content code {
   padding: 2px 4px;
   font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
