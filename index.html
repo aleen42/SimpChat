@@ -52,9 +52,13 @@
     <section class="main-content" style="margin-bottom:400px;">
 		<p>This software is designed by <a href="http://aleen42.github.io"><b style="font-size:40px;">Aleen</b></a>.</p>
 		<h3><b>1. How does it work?</b></h3>
-		<p>Simply, it contains two components which all Chats should have. One is the <b>Server</b>, and the other is the <b>Client</b>.</p>
+		<p style="text-indent:2em;">Simply, it contains two components which all Chats should have. One is the <b style="color:#a10000;font-size:24px;">Server</b>, and the other is the <b style="color:#a10000;font-size:24px;">Client</b>.</p>
 		<b style="font-size:30px;">1.1 The Server</b>
-
+        <img src="Preview/Start The Server.gif" alt="Aleen" >
+		<p style="text-indent:2em;">Here I have used an activity diagram to describe how the <b style="color:#a10000;font-size:24px;">Server</b> works when I try to start a server.</p>
+        <p style="text-indent:2em;">From the start point, the Server will get your input of port and the limited of online users. After checking your input whether they are legal, Start Button will be enable for you as long as they are legal. At that moment, just click the Start Button to start the server.</p>
+        <p style="text-indent:2em;">When the Start Button is clicked, the server will create a thread called <b style="color:#a10000;font-size:24px;">ServerThread</b>, which will create <b style="color:#a10000;font-size:24px;">ServerSocket</b> and accept clients to connect. Once a client connects to this socket, the server will create a thread called <b style="color:#a10000;font-size:24px;">ClientThread</b>, which is used to serve the client. This ClientThread will be put into an ArrayList, <b style="color:#a10000;font-size:24px;">Clients</b>.</p>
+        <p style="text-indent:2em;">Then, I would like to talk about how <b style="color:#a10000;font-size:24px;">ClientThread</b> serves the client, mainly handling messages from clients.</p>
 <h3>
     </section>
   </body>
