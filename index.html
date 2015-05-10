@@ -219,6 +219,40 @@ contentPane.add(Close_Button);</code></pre>
     } 
 }</code></pre>
 
+		<b style="font-size:30px;">2.4 Drag Borderless Window</b><b style="color:#a10000;font-size:20px;"> (eg. Main Window)</b>
+<pre><code>private int point_x, point_y;<font style="color:#000"> //Store the position of the mouse</font>
+private boolean isDragging = false;<font style="color:#000"> //Become true when dragging</font>
+<font style="color:#000">/* Listen to the Mouse Clicking */</font>
+addMouseListener(new MouseAdapter() 
+{
+    public void mousePressed(MouseEvent e) 
+    {
+	isDragging = true;
+	point_x = e.getX();<font style="color:#000"> //Get axis X of the mouse</font>
+	point_y = e.getY();<font style="color:#000"> //Get axis Y of the mouse</font>
+    }
+    public void mouseReleased(MouseEvent e) 
+    {
+	isDragging = false;
+    }
+});
+<font style="color:#000">/* Listen to the Mouse Dragging */</font>
+addMouseMotionListener(new MouseMotionAdapter()
+{
+    public void mouseDragged(MouseEvent e) 
+    {
+	if (isDragging) 
+	{ 
+	    int left = getLocation().x;<font style="color:#000"> //Get axis X of the window</font>
+	    int top = getLocation().y;<font style="color:#000"> //Get axis Y of the window</font>
+	    setLocation(left + e.getX() - point_x, top + e.getY() - point_y);
+	} 
+    }
+}); </code></pre>
+		<b style="font-size:30px;">2.5 Other Components</b>
+        <p style="text-indent:2em;">To be frank, it's not easier to design delicate desktop software with <b style="color:#a10000;font-size:24px;">Java</b> than with <b style="color:#a10000;font-size:24px;">C#</b> + <b style="color:#a10000;font-size:24px;">XAML</b>. However, <b style="color:#a10000;font-size:24px;">SwingC</b>, an open resource, can help you to design different components.</p>
+        <h3 style="margin-left:-50px;"><b>3. Summary</b></h3>
+        <p style="text-indent:2em;"><b style="color:#a10000;font-size:30px;">SimpChat</b> is just a software, designed to learn how <b style="color:#a10000;font-size:24px;">Socket</b> works. If there are any problems which you would like to communicate with me, Just send me a email: <a href="mailto:408503598@qq.com"><b style="font-size:24px;">408503598@qq.com</b></a>. I am waiting for your voice.</p>
 <h3>
     </section>
     <div class="tail">
