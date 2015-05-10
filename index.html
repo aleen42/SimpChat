@@ -101,10 +101,10 @@
         <p style="text-indent:2em;">The Server will handle it by release relative resources for this client, and stop the ClientThread of this client, removing it from the ArrayList, Clients, at the same time. What another thing the Server will do is to send <b style="color:#a10000;font-size:24px;">DELETE</b> label message, telling other clients to update online list.</p>
         
         <p>ii. <b style="color:#a10000;font-size:24px;"> PUBLIC_MESSAGE</b></font>: Means that a client would like to send messages to all other online users.</p> 
-        <p style="text-indent:2em;">The Server will handle it by transferring it to all clients through ClientThread in the ArrayList, Clients.</p>
+        <p style="text-indent:2em;">The Server will handle it by delivering it to all clients through ClientThread in the ArrayList, Clients.</p>
         
         <p>iii. <b style="color:#a10000;font-size:24px;"> PRIVATE_MESSAGE</b></font>: Means that a client would like to send private messages to the specifical online users.</p> 
-        <p style="text-indent:2em;">The Server will first extract the username, <b style="color:#a10000;font-size:24px;"> des_username</b>, and its IP address, <b style="color:#a10000;font-size:24px;"> des_ip</b>. Then, it will go through all ClientThread in the ArrayList, Clients, to match. When found, messages will be transferred to it.</p>
+        <p style="text-indent:2em;">The Server will first extract the username, <b style="color:#a10000;font-size:24px;"> des_username</b>, and its IP address, <b style="color:#a10000;font-size:24px;"> des_ip</b>. Then, it will go through all ClientThread in the ArrayList, Clients, to match. When found, messages will be delivered to it.</p>
         
         
 <h3>
