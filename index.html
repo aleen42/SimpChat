@@ -12,9 +12,15 @@
     <link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.2.0/css/font-awesome.min.css" />
 	<!--<link rel="stylesheet" type="text/css" href="stylesheets/menu/dropdown.css" />-->
     
-    <!--bottom_menu-->
-	<!--<link rel="stylesheet" type="text/css" href="stylesheets/bottom_menu/component2.css" />-->
-    <!--bottom_menu-->
+    <!--menu-->
+    <link rel="stylesheet" type="text/css" href="stylesheets/menu/demo.css" />
+	<!-- common styles -->
+	<link rel="stylesheet" type="text/css" href="stylesheets/menu/dialog.css" />
+	<!-- individual effect -->
+	<link rel="stylesheet" type="text/css" href="stylesheets/menu/dialog-ken.css" />
+    <script src="js/menu/modernizr.custom.js"></script> 
+	<!--<script src="js/menu/snap.svg-min.js"></script>-->
+    <!--menu-->
     
     <script type="text/javascript" src="js/jquery.js"></script>
 	<script type="text/javascript" src="js/kefu.js"></script>
@@ -40,6 +46,35 @@
      	<a href="https://github.com/aleen42/SimpChat" class="btn">View on GitHub</a>
       	<a href="https://github.com/aleen42/SimpChat/zipball/master" class="btn">SimpChat.zip</a>
        	<a href="https://github.com/aleen42/SimpChat/tarball/master" class="btn">SimpChat.tar.gz</a>
+        <!--menu-->
+			<div class="Navigation_Button"><button data-dialog="somedialog" class="trigger"><i class="fa fa-fw fa-bars"></i>NAVIGATION BAR</button></div>
+            <div id="somedialog" class="dialog">
+					<div class="dialog__overlay"></div>
+					<div class="dialog__content">
+						<h2 style="color:#000">
+                        	<strong>Aloha</strong>, click into another page.
+                        	<div class="Navigation_Bar_List">
+                                <a href="https://aleen42.github.io"><button style="margin-right:20px">Home</button></a>
+                                <a href="https://aleen42.github.io/resume.html"><button style="margin-right:20px">Resume</button></a>
+                                <font style="margin-right:20px; color:#000; cursor:default">SimpChat</font>
+                            </div>
+                        </h2><button class="action" data-dialog-close style="margin-top:20px;">Close</button>
+					</div>
+			</div>
+            <script src="js/menu/classie.js"></script>
+			<script src="js/menu/dialogFx.js"></script>
+            <script>
+                (function() {
+    
+                    var dlgtrigger = document.querySelector( '[data-dialog]' ),
+                        somedialog = document.getElementById( dlgtrigger.getAttribute( 'data-dialog' ) ),
+                        dlg = new DialogFx( somedialog );
+    
+                    dlgtrigger.addEventListener( 'click', dlg.toggle.bind(dlg) );
+    
+                })();
+            </script>
+        <!--menu-->
     </section>
     <!--banner-->
         <section class="banner" style="font-size:0">
@@ -60,7 +95,7 @@
         <p style="text-indent:2em;">When the Start Button is clicked, the server will create a thread called <b style="color:#a10000;font-size:24px;">ServerThread</b>, which will create <b style="color:#a10000;font-size:24px;">ServerSocket</b> and accept clients to connect. Once a client connects to this socket, the server will create a thread called <b style="color:#a10000;font-size:24px;">ClientThread</b>, which is used to serve the client. This ClientThread will be put into an ArrayList, <b style="color:#a10000;font-size:24px;">Clients</b>.</p>
         <p style="text-indent:2em;">Then, I would like to talk about how <b style="color:#a10000;font-size:24px;">ClientThread</b> serves the client, mainly handling messages from clients.</p>
         <img src="Preview/Handle messages.gif" alt="Aleen" >
-        <p style="text-indent:2em;"></p>
+        <p style="text-indent:2em;">Here, I have designed three labels for all the messages from Clients: <b style="color:#a10000;font-size:24px;">CLOSE</b>, <b style="color:#a10000;font-size:24px;">PUBLIC_MESSAGE</b> and <b style="color:#a10000;font-size:24px;">PRIVATE_MESSAGE</b>.</p>
 <h3>
     </section>
   </body>

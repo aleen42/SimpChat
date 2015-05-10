@@ -68,6 +68,11 @@ a {
       margin-top: 1rem;
       margin-left: 0; } }*/
 
+/* Navigation */
+.Navigation_Button{position:absolute;margin-left:369px;margin-top:-280px;width:auto;font-size:20px;font-family:Arial}
+.Navigation_Bar_List a {color: #60b17c;text-decoration: none; } 
+.Navigation_Bar_List a:hover {color: #47845c;text-decoration: none; }
+
 /* banner */
 .banner{position:relative;left:50%;margin-left:-960px;width:1920px;z-index:1;height:600px;overflow:hidden}
 .banner .tel{position:relative;left:400px;width:400px;height:31px;float:left;line-height:30px; background-image:url(../pic/tel.png); z-index:99; font-size:18px; text-align:center}
@@ -99,7 +104,7 @@ a {
   margin-left:-960px;width:1920px;
   height:520px;
 /*  background-image: linear-gradient(120deg, #155799, #159957); */
-  background-image:url(../Preview/Preview.png); 
+  background-image:url(../Preview/Preview.gif); 
   z-index:2;
   padding: 5rem 6rem; }
 
