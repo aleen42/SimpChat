@@ -86,7 +86,7 @@
     <!--banner-->
     <section class="main-content">
 		<p>This software is designed by <a href="http://aleen42.github.io"><b style="font-size:40px;">Aleen</b></a>.</p>
-		<h3><b>1. How does it work?</b></h3>
+		<h3 style="margin-left:-50px;"><b>1. How does it work?</b></h3>
 		<p style="text-indent:2em;">Simply, it contains two components which all Chats should have. One is the <b style="color:#a10000;font-size:24px;">Server</b>, and the other is the <b style="color:#a10000;font-size:24px;">Client</b>.</p>
 		<b style="font-size:30px;">1.1 The Server</b>
         <img src="Preview/Start The Server.gif" alt="Aleen" >
@@ -122,6 +122,35 @@
         
         <p style="margin-bottom:50px;margin-left:80px;">iv. <b style="color:#a10000;font-size:24px;"> DELETE</b></font>: Means that a client is offline, and make you to update online users.</p> 
         
+        <h3 style="margin-left:-50px;"><b>2. Some GUI Design Skills with Java</b></h3>
+        <b style="font-size:30px;">2.1 Borderless Style</b>
+        <pre><code>setUndecorated(true);<font style="color:#000">//make OS default border disappear</font></code></pre>
+        <b style="font-size:30px;">2.2 Designed Background</b>
+        <pre><code>AWTUtilities.setWindowOpaque(this, false);<font style="color:#000"> //make JFrame to be a transparent one</font>
+<font style="color:#000">/* Background */</font>
+Image bg = this.getToolkit().getImage("./Pic/bg.png");<font style="color:#000"> //Get Image</font>
+contentPane = new Background(bg);<font style="color:#000"> //Set Background as a Pane</font>
+setContentPane(contentPane);<font style="color:#000"> //Set Content</font></code></pre>
+<pre><code>public class Background extends JPanel{ 
+    private Image img;
+    public Background(Image img) 
+    { 
+        this.img = img; 
+        <font style="color:#000">/* Ensure that the whole image is drew*/</font>
+        Dimension size = new Dimension(img.getWidth(null),img.getHeight(null)); 
+        setSize(size);  
+        setPreferredSize(size); 
+        setMinimumSize(size); 
+        setMaximumSize(size); 
+        
+        setLayout(null);<font style="color:#000"> //Set the LayoutManager as null</font>
+    } 
+    <font style="color:#000">/* Override paintComponent of JPanel to draw background*/</font>
+    public void paintComponent(Graphics g) 
+    { 
+        g.drawImage(img, 0, 0, null); 
+    }
+}</code></pre>
 <h3>
     </section>
     <div class="tail">
