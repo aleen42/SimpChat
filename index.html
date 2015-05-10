@@ -125,18 +125,20 @@
         <h3 style="margin-left:-50px;"><b>2. Some GUI Design Skills with Java</b></h3>
         <b style="font-size:30px;">2.1 Borderless Style</b>
         <pre><code>setUndecorated(true);<font style="color:#000">//make OS default border disappear</font></code></pre>
-        <b style="font-size:30px;">2.2 Designed Background</b>
+        
+        <b style="font-size:30px;">2.2 Designed Background</b><b style="color:#a10000;font-size:20px;"> (eg. Main Background)</b>
         <pre><code>AWTUtilities.setWindowOpaque(this, false);<font style="color:#000"> //make JFrame to be a transparent one</font>
 <font style="color:#000">/* Background */</font>
 Image bg = this.getToolkit().getImage("./Pic/bg.png");<font style="color:#000"> //Get Image</font>
 contentPane = new Background(bg);<font style="color:#000"> //Set Background as a Pane</font>
 setContentPane(contentPane);<font style="color:#000"> //Set Content</font></code></pre>
-<pre><code>public class Background extends JPanel{ 
+<pre><code>public class Background extends JPanel
+{ 
     private Image img;
     public Background(Image img) 
     { 
         this.img = img; 
-        <font style="color:#000">/* Ensure that the whole image is drew*/</font>
+        <font style="color:#000">/* Ensure that the whole image is drew */</font>
         Dimension size = new Dimension(img.getWidth(null),img.getHeight(null)); 
         setSize(size);  
         setPreferredSize(size); 
@@ -145,12 +147,78 @@ setContentPane(contentPane);<font style="color:#000"> //Set Content</font></code
         
         setLayout(null);<font style="color:#000"> //Set the LayoutManager as null</font>
     } 
-    <font style="color:#000">/* Override paintComponent of JPanel to draw background*/</font>
+    <font style="color:#000">/* Override paintComponent of JPanel to draw background */</font>
     public void paintComponent(Graphics g) 
     { 
         g.drawImage(img, 0, 0, null); 
     }
 }</code></pre>
+
+		<b style="font-size:30px;">2.3 Designed Button</b><b style="color:#a10000;font-size:20px;"> (eg. Close Button)</b>
+<pre><code><font style="color:#000">/* Close Button */</font>
+ImageIcon close_button_bg = new ImageIcon("./Pic/closebutton_static.png");
+ImageIcon close_button_mouseover = new ImageIcon("./Pic/closebutton_mouseover.png");
+ImageIcon close_button_pressed = new ImageIcon("./Pic/closebutton_pressed.png");
+<font style="color:#000">/* Initialize Button */</font>
+Close_Button = new Button(close_button_bg, close_button_mouseover, close_button_pressed, 0);
+Close_Button.setOpaque(false);		
+Close_Button.setBounds(379, 4, 28, 28);
+Close_Button.addActionListener(new ActionListener() 
+{
+    public void actionPerformed(ActionEvent arg0) 
+    {
+	System.exit(0);
+    }
+});
+<font style="color:#000">/* Add Button to the main Pane */</font>
+contentPane.add(Close_Button);</code></pre>
+<pre><code>public class Button extends JButton 
+{
+    Button(ImageIcon icon, ImageIcon mouseover, ImageIcon pressed, int type) 
+    { 
+    	<font style="color:#000">/* Static style */</font>
+        setSize(icon.getImage().getWidth(null),icon.getImage().getHeight(null)); 
+        setIcon(icon); 
+        <font style="color:#000">/* Reset the default style of buttons */</font>
+        setMargin(new Insets(0,0,0,0)); 
+        setIconTextGap(0); 
+        setBorderPainted(false); 
+        setBorder(null); 
+        setText(null); 
+        <font style="color:#000">/* Add mouse listener */</font>
+        addMouseListener(new MouseAdapter()
+        {
+            public void mouseEntered(MouseEvent e)
+            {
+		setIcon(mouseover);<font style="color:#000"> //Set mouseover_icon when the mouse is over</font>
+            }
+            public void mouseExited(MouseEvent e)
+            {
+		setIcon(icon);<font style="color:#000"> //Set static_icon when the mouse leaves</font>
+            }	
+	    public void mousePressed(MouseEvent e) 
+	    {
+		setIcon(pressed);<font style="color:#000"> //Set pressed_icon when the mouse is pressed</font>
+	    }
+	    public void mouseReleased(MouseEvent e) 
+	    {
+		<font style="color:#000">/* Set different types of icons when the mouse is released */</font>
+		switch(type)
+		{<font style="color:#000"> //Based on what you want when mouse is pressed, dragged out and released</font>
+		    case 0: 
+		        setIcon(icon);
+		        break;
+		    case 1:
+		        setIcon(mouseover);
+		        break;
+		    default:
+		        break;
+		}	
+	    }
+        });
+    } 
+}</code></pre>
+
 <h3>
     </section>
     <div class="tail">
