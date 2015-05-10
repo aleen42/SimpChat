@@ -92,10 +92,21 @@
         <img src="Preview/Start The Server.gif" alt="Aleen" >
 		<p style="text-indent:2em;">Here I have used an activity diagram to describe how the <b style="color:#a10000;font-size:24px;">Server</b> works when I try to start a server.</p>
         <p style="text-indent:2em;">From the start point, the Server will get your input of port and the limited of online users. After checking your input whether they are legal, Start Button will be enable for you as long as they are legal. At that moment, just click the Start Button to start the server.</p>
-        <p style="text-indent:2em;">When the Start Button is clicked, the server will create a thread called <b style="color:#a10000;font-size:24px;">ServerThread</b>, which will create <b style="color:#a10000;font-size:24px;">ServerSocket</b> and accept clients to connect. Once a client connects to this socket, the server will create a thread called <b style="color:#a10000;font-size:24px;">ClientThread</b>, which is used to serve the client. This ClientThread will be put into an ArrayList, <b style="color:#a10000;font-size:24px;">Clients</b>.</p>
+        <p style="text-indent:2em;">When the Start Button is clicked, the server will create a thread called <b style="color:#a10000;font-size:24px;">ServerThread</b>, which will create <b style="color:#a10000;font-size:24px;">ServerSocket</b> and accept clients to connect. Once a client connects to this socket, the server will create a thread called <b style="color:#a10000;font-size:24px;">ClientThread</b>, which is used to serve the client. This ClientThread will be put into an ArrayList, <b style="color:#a10000;font-size:24px;">Clients</b>. At the same time, <b style="color:#a10000;font-size:24px;">ADD</b> label message will be sent to other clients, updating online list.</p>
         <p style="text-indent:2em;">Then, I would like to talk about how <b style="color:#a10000;font-size:24px;">ClientThread</b> serves the client, mainly handling messages from clients.</p>
         <img src="Preview/Handle messages.gif" alt="Aleen" >
         <p style="text-indent:2em;">Here, I have designed three labels for all the messages from Clients: <b style="color:#a10000;font-size:24px;">CLOSE</b>, <b style="color:#a10000;font-size:24px;">PUBLIC_MESSAGE</b> and <b style="color:#a10000;font-size:24px;">PRIVATE_MESSAGE</b>.</p>
+        
+        <p>i. <b style="color:#a10000;font-size:24px;"> CLOSE</b></font>: Means that the Client would like to disconnect.</p> 
+        <p style="text-indent:2em;">The Server will handle it by release relative resources for this client, and stop the ClientThread of this client, removing it from the ArrayList, Clients, at the same time. What another thing the Server will do is to send <b style="color:#a10000;font-size:24px;">DELETE</b> label message, telling other clients to update online list.</p>
+        
+        <p>ii. <b style="color:#a10000;font-size:24px;"> PUBLIC_MESSAGE</b></font>: Means that a client would like to send messages to all other online users.</p> 
+        <p style="text-indent:2em;">The Server will handle it by transferring it to all clients through ClientThread in the ArrayList, Clients.</p>
+        
+        <p>iii. <b style="color:#a10000;font-size:24px;"> PRIVATE_MESSAGE</b></font>: Means that a client would like to send private messages to the specifical online users.</p> 
+        <p style="text-indent:2em;">The Server will first extract the username, <b style="color:#a10000;font-size:24px;"> des_username</b>, and its IP address, <b style="color:#a10000;font-size:24px;"> des_ip</b>. Then, it will go through all ClientThread in the ArrayList, Clients, to match. When found, messages will be transferred to it.</p>
+        
+        
 <h3>
     </section>
   </body>
