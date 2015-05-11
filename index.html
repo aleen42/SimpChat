@@ -41,7 +41,7 @@
   </head>
   <body>
   	<div class="c">
-    <section class="page-header">
+    <section class="page-header" oncontextmenu="return false;">
     	<!--<h1 class="project-name">Simpchat</h1>
       	<h2 class="project-tagline">A simple tool used for chatting.</h2>-->
      	<a href="https://github.com/aleen42/SimpChat" class="btn">View on GitHub</a>
@@ -80,8 +80,8 @@
     <!--banner-->
         <section class="banner" style="font-size:0">
             <ul>
-            	<li><img src="Preview/b1.gif" alt="Aleen" ></li>
-                <li><img src="Preview/b2.gif" alt="Aleen" ></li>
+            	<li><img src="Preview/b1.gif" alt="Aleen" oncontextmenu="return false;"></li>
+                <li><img src="Preview/b2.gif" alt="Aleen" oncontextmenu="return false;"></li>
             </ul>
         </section>	
     <!--banner-->
@@ -90,12 +90,12 @@
 		<h3 style="margin-left:-50px;"><b>1. How does it work?</b></h3>
 		<p style="text-indent:2em;">Simply, it contains two components which all Chats should have. One is the <b style="color:#a10000;font-size:24px;">Server</b>, and the other is the <b style="color:#a10000;font-size:24px;">Client</b>.</p>
 		<b style="font-size:30px;">1.1 The Server</b>
-        <img src="Preview/Start The Server.gif" alt="Aleen" >
+        <img src="Preview/Start The Server.gif" alt="Aleen" oncontextmenu="return false;">
 		<p style="text-indent:2em;">Here I have used an activity diagram to describe how the <b style="color:#a10000;font-size:24px;">Server</b> works when I try to start a server.</p>
         <p style="text-indent:2em;">From the start point, the Server will get your input of port and the limited of online users. After checking your input whether they are legal, Start Button will be enable for you as long as they are legal. At that moment, just click the Start Button to start the server.</p>
         <p style="text-indent:2em;">When the Start Button is clicked, the server will create a thread called <b style="color:#a10000;font-size:24px;">ServerThread</b>, which will create <b style="color:#a10000;font-size:24px;">ServerSocket</b> and accept clients to connect. Once a client connects to this socket, the server will create a thread called <b style="color:#a10000;font-size:24px;">ClientThread</b>, which is used to serve the client. This ClientThread will be put into an ArrayList, <b style="color:#a10000;font-size:24px;">Clients</b>. At the same time, <b style="color:#a10000;font-size:24px;">ADD</b> label message will be sent to other clients, updating online list.</p>
         <p style="text-indent:2em;">Then, I would like to talk about how <b style="color:#a10000;font-size:24px;">ClientThread</b> serves the client, mainly handling messages from clients.</p>
-        <img src="Preview/Handle messages.gif" alt="Aleen" >
+        <img src="Preview/Handle messages.gif" alt="Aleen" oncontextmenu="return false;">
         <p style="text-indent:2em;">Here, I have designed three labels for all the messages from Clients: <b style="color:#a10000;font-size:24px;">CLOSE</b>, <b style="color:#a10000;font-size:24px;">PUBLIC_MESSAGE</b> and <b style="color:#a10000;font-size:24px;">PRIVATE_MESSAGE</b>.</p>
         
         <p style="margin-top:50px;margin-left:80px;">i. <b style="color:#a10000;font-size:24px;"> CLOSE</b></font>: Means that the Client would like to disconnect.</p> 
@@ -109,7 +109,7 @@
         
         <b style="font-size:30px;">1.2 The Client</b>
         <p style="text-indent:2em;">For the <b style="color:#a10000;font-size:24px;"> Client</b>, first you must login. I just use <b style="color:#a10000;font-size:24px;"> user_name</b> and <b style="color:#a10000;font-size:24px;"> ip_address</b> to authorize a user.</p>
-        <img src="Preview/login.gif" alt="Aleen" >
+        <img src="Preview/login.gif" alt="Aleen" oncontextmenu="return false;">
         <p style="text-indent:2em;">First, the Client will get your input User_name and IP. After connecting to the <b style="color:#a10000;font-size:24px;"> SQLServer(DB)</b>, it will check whether the user with this ip is existed and offline. If non-existed, it will enable you to sign up, and if it's existed but online, it will mention you that the user is already online.</p>
         <p style="text-indent:2em;">Message Handling is familiar with the Server. 4 Labels: <b style="color:#a10000;font-size:24px;">CLOSE</b>, <b style="color:#a10000;font-size:24px;">MESSAGE</b>, <b style="color:#a10000;font-size:24px;">ADD</b> and <b style="color:#a10000;font-size:24px;">DELETE</b> are designed.</p>
         
@@ -256,7 +256,7 @@ addMouseMotionListener(new MouseMotionAdapter()
         <p style="text-indent:2em;"><b style="color:#a10000;font-size:30px;">SimpChat</b> is just a software, designed to learn how <b style="color:#a10000;font-size:24px;">Socket</b> works. If there are any problems which you would like to communicate with me, Just send me a email: <a href="mailto:408503598@qq.com"><b style="font-size:24px;">408503598@qq.com</b></a>. I am waiting for your voice.</p>
     </section>
     <div class="tail">
-    	<img src="Preview/tail.gif" alt="Aleen" >
+    	<img src="Preview/tail.gif" alt="Aleen" oncontextmenu="return false;">
     </div>
   </div>
   </body>
