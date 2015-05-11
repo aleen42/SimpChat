@@ -6,7 +6,9 @@
 	padding: 0;
 	list-style: none;
   }
-  
+
+.c{overflow:hidden;}  
+
 body {
   padding: 0px;
   margin: 0px;
