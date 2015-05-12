@@ -159,6 +159,7 @@
 	backface-visibility: hidden;
 	pointer-events: auto;
 	filter:alpha(opacity=40);opacity:0.4;
+	transition:opacity 0.2s;
 }
 
 .csstransforms .cn-wrapper li a span {
@@ -177,7 +178,7 @@
 	background: -webkit-radial-gradient(transparent 35%, #000 35%);
 	background: -moz-radial-gradient(transparent 35%, #000 35%);
 	background: radial-gradient(transparent 35%, #000 35%);
-	filter:alpha(opacity=70);opacity:0.7
+	filter:alpha(opacity=70);opacity:0.7;
 }
 
 
