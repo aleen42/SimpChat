@@ -135,7 +135,7 @@ public class ClientThread extends Thread {
 					String des_username = stringTokenizer.nextToken();
 					String des_ip = stringTokenizer.nextToken();
 					String private_text = stringTokenizer.nextToken();
-					Server.sendText(User_name + "/" + IP + " said to all: " + private_text);
+					Server.sendText(User_name + "/" + IP + " said to " + des_username+ "/" + des_ip + ": " + private_text);
 					for(int i = Server.Clients.size() - 1; i >= 0; i--) 
 					{											
 						if(Server.Clients.get(i).getUser().equals(des_username) && Server.Clients.get(i).getIP().equals(des_ip))
