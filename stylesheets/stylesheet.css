@@ -9,10 +9,17 @@
 
 .c{overflow:hidden;}  
 
+
+/* webkit, opera, IE9 */
+::selection { background:#a10000; color:#fff;}
+/* mozilla firefox */
+::-moz-selection { background:#a10000;; color:#fff;} 
+
 body {
   padding: 0px;
   margin: 0px;
-  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif, "黑体";
+  /*font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif, "黑体";*/
+  font-family:"Open Sans", "Lucida Grande", "Tahoma", "Verdana", sans-serif;
   font-size: 16px;
   line-height: 1.5;
   color: #fff; 
