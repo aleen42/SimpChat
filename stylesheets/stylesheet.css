@@ -98,7 +98,7 @@ a {
 .banner .b_push a.on{background:#a10000}
 
 /* tail */
-.tail{position:relative;left:50%;margin-left:-960px;width:1920px;z-index:1;height:400px;}
+.tail{position:relative;left:50%;margin-left:-960px;width:1920px;z-index:1;height:270px;}
 
 .page-header {
   color:#FFF;
