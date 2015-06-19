@@ -420,7 +420,7 @@ public class Server extends SimpChat{
 			error_Label.setText("Port has been used, please try another one!");
 			error_Label.setVisible(true);
 			throw new BindException("Error Start The Server!");
-		}
+	 	}
 	}
 	
 	@SuppressWarnings("deprecation")
