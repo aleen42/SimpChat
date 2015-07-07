@@ -1,14 +1,17 @@
 package com.Simp;
 
 import java.awt.*;
+import java.awt.datatransfer.*;
+import java.awt.dnd.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
 import java.net.BindException;
 import java.net.ServerSocket;
-import java.util.Date;
+import java.util.*;
+import java.util.List;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -300,6 +303,8 @@ public class Server extends SimpChat{
         		Send_Button.setEnabled(Check_send());
             }
         });	
+		
+		
 		getContentPane().add(input_box);
 
 		/* Send_Button */

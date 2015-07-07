@@ -1,9 +1,16 @@
 package com.Simp;
 
 import java.awt.*;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetAdapter;
+import java.awt.dnd.DropTargetDropEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -12,6 +19,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
@@ -320,6 +329,42 @@ public class Client extends SimpChat{
         		Send_Button.setEnabled(Check_send());
             }
         });	
+		/* file drag or add */
+		DropTargetAdapter drop_adapter = new DropTargetAdapter(){
+
+			@Override
+			public void drop(DropTargetDropEvent event) {
+				// TODO Auto-generated method stub
+				try
+				{
+					Transferable tf = event.getTransferable();
+					if(tf.isDataFlavorSupported(DataFlavor.javaFileListFlavor))
+					{
+						event.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
+						List file_list = (List) tf.getTransferData(DataFlavor.javaFileListFlavor);
+						Iterator file_iterator = file_list.iterator();
+						while(file_iterator.hasNext())
+						{
+							File file = (File) file_iterator.next();
+							input_box.setText(input_box.getText() + " " + file.getAbsolutePath());
+							event.dropComplete(true);
+						}
+					}
+					else
+					{
+						Content.setText("Cannot add this file\n");
+						event.rejectDrop();
+					}
+				}
+				catch(Exception e)
+				{
+					e.printStackTrace();
+				}
+			}
+			
+		};
+		
+		new DropTarget(input_box, DnDConstants.ACTION_COPY_OR_MOVE, drop_adapter);
 		getContentPane().add(input_box);
 
 		/* Send_Button */
@@ -459,7 +504,6 @@ public class Client extends SimpChat{
 			db.Update_status(User_name, User_IP, "offline");
 			userlist.get_listItem().clear();
 			super.clear_user_info();
-			sendText("Disconnect Succeed!");
 			ip_textbox.setEditable(true);
 			ip_textbox.setFocusable(true);
 			port_textbox.setEditable(true);
